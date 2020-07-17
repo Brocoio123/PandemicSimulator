@@ -3,9 +3,9 @@ class Node{
         this.NodeCoordinates = NodeCoordinates;
         this.StartingNodeCoordinates = StartingNodeCoordinates;
         this.endNodeCoordinates = endNodeCoordinates;
-        this.Gcost = this.GCostCalculation();
-        this.Hcost = this.HCostCalculation();
-        this.Fcost = this.FCostCalculation();
+        this.GCost = this.GCostCalculation();
+        this.HCost = this.HCostCalculation();
+        this.FCost = this.FCostCalculation();
         this.status = "hidden";
     }
 
@@ -20,6 +20,6 @@ class Node{
     }
 
     FCostCalculation = function(){
-        return this.Gcost + this.Hcost;
+        return this.GCost + this.HCost;
     }
 }

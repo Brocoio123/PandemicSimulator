@@ -58,6 +58,7 @@ class Person{
     aStarPathFinding = function(){
         var aStarGrid = new Array(screenX + 1);
         var openedNodes = new Array();
+        var closedNodes = new Array();
         var currentNode = [this.x, this.y];
         for (var i = 0; i < aStarGrid.length; i++) { 
             aStarGrid[i] = [30]; 
@@ -162,7 +163,32 @@ class Person{
                         break;
                   }
             }
-            break;        
+            var lowestFcost = openedNodes[0].Fcost;
+            var nextNodeToClose = openedNodes[0];
+            var iNode = 0;
+            var iOpenNodeToDelete = 0; 
+            openedNodes.forEach(node => {
+                if(node.Fcost < lowestFcost && node != undefined){
+                    lowestFcost = node.Fcost;
+                    nextNodeToClose = node;
+                    iOpenNodeToDelete = iNode;
+                }
+                iNode++;
+            });
+
+            iNode = 0;
+            openedNodes.forEach(node => {
+                if(node.Fcost == lowestFcost && node.HCost < nextNodeToClose.HCost && node != undefined){
+                    nextNodeToClose = node;
+                    iOpenNodeToDelete = iNode;
+                }
+                iNode++;
+            });
+            nextNodeToClose.status = "closed";
+            closedNodes.push(nextNodeToClose);
+            openedNodes[iOpenNodeToDelete] = undefined;
+            currentNode = nextNodeToClose;
+            break;
         }
         console.log(openedNodes);
         console.log(aStarGrid);
