@@ -1,0 +1,2 @@
+# PandemicSimulator
+A pandemic simulator
