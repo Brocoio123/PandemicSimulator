@@ -5,8 +5,9 @@
 //            R:Character
 //            P:Shops
 //            T:blockers
-screenX = 20;
-screenY = 25;
+//For now only identical values, fix later
+screenY = 6;
+screenX = 6;
 // Create one dimensional array 
 var world = new Array(screenX + 1); 
 var turnInterval = 400000; //turn interval in milliseconds
@@ -18,7 +19,7 @@ var blockerCharacter = "T";
 // Loop to create 2D array using 1D array 
 
 for (var i = 0; i < world.length; i++) { 
-    world[i] = [30]; 
+    world[i] = [31]; 
 } 
 var h = 0; 
 
@@ -31,23 +32,21 @@ for (var i = 0; i < screenX; i++) {
 } 
 //initialize shop
 arrayUpdate(world, 0, 0, shopCharacter);
-arrayUpdate(world, 0, 20, shopCharacter);
-arrayUpdate(world, 9, 20, shopCharacter);
-arrayUpdate(world, 15, 23, shopCharacter);
+arrayUpdate(world, 5, 4, shopCharacter);
 arrayUpdate(world, 0, 1, blockerCharacter);
 arrayUpdate(world, 1, 1, blockerCharacter);
 arrayUpdate(world, 2, 1, blockerCharacter);
 arrayUpdate(world, 3, 1, blockerCharacter);
-arrayUpdate(world, 4, 1, blockerCharacter);
-arrayUpdate(world, 5, 1, blockerCharacter);
-arrayUpdate(world, 6, 1, blockerCharacter);
-arrayUpdate(world, 7, 1, blockerCharacter);
-arrayUpdate(world, 8, 1, blockerCharacter);
-arrayUpdate(world, 9, 1, blockerCharacter);
 
 //Spawn persons
 for (var i = 0; i < personsToSpawn; i++) { 
-    personsVar[i] = new Person(Math.floor(Math.random() * (screenX)), Math.floor(Math.random() * (screenY)));
+    var randX = Math.floor(Math.random() * (screenX));
+    var randY = Math.floor(Math.random() * (screenY))
+    while(world[randY][randX] == "T" || world[randY][randX] == "P"){
+        randX = Math.floor(Math.random() * (screenX));
+        randY = Math.floor(Math.random() * (screenY))
+    }
+    personsVar[i] = new Person(randY, randX);
 } 
 
 function personsUpdateMovement(){
@@ -69,7 +68,6 @@ function personsUpdateMovement(){
 }
 
 function arrayDisplay(X = screenX, Y = screenY){
-    console.log(Date.now());
     document.getElementById("world").innerHTML = '';
     for (var i = 0; i < X; i++) {
         for (var j = 0; j < Y; j++)
