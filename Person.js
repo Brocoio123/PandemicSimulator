@@ -1,7 +1,7 @@
 class Person{
-    constructor(x, y){
-        this.x = x;
+    constructor(y, x){
         this.y = y;
+        this.x = x;
         // this.radius = radius;
         this.status = "";
 
@@ -56,7 +56,7 @@ class Person{
     }
 
     aStarPathFinding = function(){
-        var aStarGrid = new Array(screenX + 1);
+        var aStarGrid = new Array(screenY + 1);
         var openedNodes = new Array();
         console.log(openedNodes)
 
@@ -72,10 +72,10 @@ class Person{
         var shopNodes = new Array();
         var e = 0;
         //closest shop is selected as the end node
-        for (var i = 0; i < screenX; i++) { 
-            for (var j = 0; j < screenY; j++) {
-                if(world[i][j] == "P"){
-                    shopNodes[e] = [i,j];
+        for (var i = 0; i < screenY; i++) { 
+            for (var j = 0; j < screenX; j++) {
+                if(world[j][i] == "P"){
+                    shopNodes[e] = [j,i];
                     e++;
                 }
             } 
@@ -84,41 +84,40 @@ class Person{
         console.log("shopnodes: " + shopNodes)
         var ClosestShopCoordinates = shopNodes[0];
         shopNodes.forEach(shopCoordinates => {
-            if(Math.abs(shopCoordinates[0] - this.x) + Math.abs(shopCoordinates[1] - this.y) < Math.abs(ClosestShopCoordinates[0] - this.x) + Math.abs(ClosestShopCoordinates[1] - this.y)){
+            if(Math.abs(shopCoordinates[1] - this.y) + Math.abs(shopCoordinates[0] - this.x) < Math.abs(ClosestShopCoordinates[1] - this.y) + Math.abs(ClosestShopCoordinates[0] - this.x)){
                 console.log("new closest!")
                 ClosestShopCoordinates = shopCoordinates;
             }
         });
 
         //adding the blockers
-        for (var i = 0; i < screenX; i++) { 
-            for (var j = 0; j < screenY; j++) { 
-                aStarGrid[i][j] = new Node([i, j], [this.x, this.y], ClosestShopCoordinates);
+        for (var i = 0; i < screenY; i++) { 
+            for (var j = 0; j < screenX; j++) { 
+                aStarGrid[j][i] = new Node([j, i], [this.y, this.x], ClosestShopCoordinates);
                 //blockers
-                if(world[i][j] == "T"){
-                    aStarGrid[i][j] = "T";
+                if(world[j][i] == "T"){
+                    aStarGrid[j][i] = "T";
                 }
-                //end node
-
             } 
         }
+
         //adding end node
         aStarGrid[ClosestShopCoordinates[0]][ClosestShopCoordinates[1]] = "P";
-        console.log(openedNodes)
-
-        console.log(aStarGrid);
-        //a star main loop
+        //console.log(openedNodes)
+        console.log("grid: ")
+        console.log(JSON.parse(JSON.stringify(aStarGrid)))
         //closing the first node
         aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]].status = "closed";
+        //a star main loop
+        console.log("currentNodeCoordinates: " + currentNodeCoordinates)
         while(true){
             for (var i = 0; i < 8; i++) {
-                // console.log("ITERATION: " + i)
                 switch(i) {
                     case 0:
                         if(aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]-1] != undefined && aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]-1] != "T" && aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]-1] != "P" && aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]-1].status != "closed" && aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]-1].status != "open"){
                             aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]-1].status = "open";
                             openedNodes.push(aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]-1]);
-                            console.log(aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]-1].status);
+                            console.log(aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]-1].NodeCoordinates + ": " + aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]-1].status)   
                         }
                         if(aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]-1] == "P"){console.log("THE END!");pathEnd = true;i = 8;}
                         break;
@@ -126,7 +125,7 @@ class Person{
                         if(currentNodeCoordinates[0] != 0 && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]-1] != undefined && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]-1] != "T" && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]-1] != "P" && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]-1].status != "closed" && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]-1].status != "open"){
                             aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]-1].status = "open";
                             openedNodes.push(aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]-1]);
-                            console.log(aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]-1].status)   
+                            console.log(aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]-1].NodeCoordinates + ": " + aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]-1].status)   
                         }
                         if(currentNodeCoordinates[0] != 0 && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]-1] == "P"){console.log("THE END!");pathEnd = true;i = 8;}
                         break;
@@ -134,7 +133,7 @@ class Person{
                         if(currentNodeCoordinates[0] != 0 && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]] != undefined && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]] != "T" && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]] != "P" && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]].status != "closed" && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]].status != "open"){
                             aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]].status = "open";
                             openedNodes.push(aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]]);
-                            console.log(aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]].status)  
+                            console.log(aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]].NodeCoordinates + ": " + aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]].status)   
                         }
                         if(currentNodeCoordinates[0] != 0 && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]] == "P"){console.log("THE END!");pathEnd = true;i = 8;}
                         break;
@@ -142,7 +141,7 @@ class Person{
                         if(currentNodeCoordinates[0] != 0 && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]+1] != undefined && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]+1] != "T" && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]+1] != "P" && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]+1].status != "closed" && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]+1].status != "open"){
                             aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]+1].status = "open";
                             openedNodes.push(aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]+1]);
-                            console.log(aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]+1].status)  
+                            console.log(aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]+1].NodeCoordinates + ": " + aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]+1].status)   
                         }
                         if(currentNodeCoordinates[0] != 0 && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]+1] == "P"){console.log("THE END!");pathEnd = true;i = 8;}
                         break;
@@ -150,7 +149,7 @@ class Person{
                         if(aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]+1] != undefined && aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]+1] != "T" && aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]+1] != "P" && aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]+1].status != "closed" && aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]+1].status != "open"){
                             aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]+1].status = "open";
                             openedNodes.push(aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]+1]);
-                            console.log(aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]+1].status) 
+                            console.log(aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]+1].NodeCoordinates + ": " + aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]+1].status)   
                         }
                         if(aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]+1] == "P"){console.log("THE END!");pathEnd = true;i = 8;}
                         break;
@@ -158,7 +157,7 @@ class Person{
                         if(aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]+1] != undefined && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]+1] != "T" && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]+1] != "P" && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]+1] != 30 && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]+1].status != "closed" && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]+1].status != "open"){
                             aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]+1].status = "open";
                             openedNodes.push(aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]+1]);
-                            console.log(aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]+1].status)  
+                            console.log(aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]+1].NodeCoordinates + ": " + aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]+1].status)   
                         }
                         if(aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]+1] == "P"){console.log("THE END!");pathEnd = true;i = 8;}
                         break;
@@ -166,7 +165,7 @@ class Person{
                         if(aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]] != undefined && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]] != "T" && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]] != "P" && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]] != 30 && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]].status != "closed" && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]].status != "open"){
                             aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]].status = "open";
                             openedNodes.push(aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]]);
-                            console.log(aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]].status)  
+                            console.log(aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]].NodeCoordinates + ": " + aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]].status)   
                         }
                         if(aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]] == "P"){console.log("THE END!");pathEnd = true;i = 8;}
                         break;
@@ -174,61 +173,135 @@ class Person{
                         if(aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]-1] != undefined && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]-1] != "T" && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]-1] != "P" && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]-1] != 30 && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]-1].status != "closed" && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]-1].status != "open"){
                             aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]-1].status = "open";
                             openedNodes.push(aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]-1]);
-                            console.log(aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]-1].status) 
+                            console.log(aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]-1].NodeCoordinates + ": " + aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]-1].status)   
                         }
                         if(aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]-1] == "P"){console.log("THE END!");pathEnd = true;i = 8;}
                         break;
                   }
-                //   console.log(openedNodes)
             }
+            console.log("opened nodes: ")
+            console.log(JSON.parse(JSON.stringify(openedNodes)))
+
             console.log("ololol")
             // break loop if arrived to path
             if(pathEnd == true){console.log("KKKKKKKKKKKKKKKKKKKKK");break;}
-            // console.log(openedNodes)
             var lowestFcost = 1000;
             var iNode = 0;
             var iOpenNodeToDelete = 0;
-            console.log("opened nodes: ")
-            console.log(openedNodes)
+
             openedNodes.forEach(node => {
                 if(node != undefined && node.status != "closed" && node.FCost < lowestFcost){
-                    // console.log("111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111")
-                    // console.log("NON undefined nodes: " + node)
                     lowestFcost = node.FCost;
                     nextNodeToClose = node;
                     iOpenNodeToDelete = iNode;
                 }
                 iNode++;
             });
-            // console.log(openedNodes)
 
             iNode = 0;
             openedNodes.forEach(node => {
                 if(node != undefined && node.status != "closed" && node.FCost == lowestFcost && node.HCost < nextNodeToClose.HCost){
-                    console.log("2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222")
-                    // console.log("non undefined nodes: " + node)
                     nextNodeToClose = node;
                     iOpenNodeToDelete = iNode;
                 }
                 iNode++;
             });
-            // console.log("NEXTNODETOCLOSE: " + nextNodeToClose)
-            // console.log(openedNodes)
 
             nextNodeToClose.status = "closed";
             closedNodes.push(nextNodeToClose);
             openedNodes[iOpenNodeToDelete] = undefined;
             currentNodeCoordinates = nextNodeToClose.NodeCoordinates;
+            console.log("grid: ")
+            console.log(JSON.parse(JSON.stringify(aStarGrid)))
             console.log("currentNodeCoordinates: " + currentNodeCoordinates)
-            // console.log(closedNodes)
-            if(openedNodes.length > 100){console.log(openedNodes);break;}
-            //  break;
-            // console.log("loop");
-            // console.log("currentNodeCoordinates: " + currentNodeCoordinates)
+
+            var tempGrid = world
+            closedNodes.forEach(node => {
+                tempGrid[node.NodeCoordinates[0]][node.NodeCoordinates[1]] = "R"
+            });
+            console.log("tempgrid: ")
+            console.log(JSON.parse(JSON.stringify(tempGrid)))
+
         }
+        // currentNodeCoordinates = [this.y, this.x];
+        // var coordinateDifference = 0;
+        // closedNodes.forEach(node => {
+        //     coordinateDifference = [currentNodeCoordinates[1] - node.NodeCoordinates[1], currentNodeCoordinates[0] - node.NodeCoordinates[0]]
+        //     console.log("LEL:" + coordinateDifference)
+        //          if(coordinateDifference[1] == 0 && coordinateDifference[0] == -1){console.log("LEFT")}
+        //     else if(coordinateDifference[1] == -1 && coordinateDifference[0] == -1 ){console.log("LEFT-UP")}
+        //     else if(coordinateDifference[1] == -1 && coordinateDifference[0] == 0){console.log("UP")}
+        //     else if(coordinateDifference[1] == -1 && coordinateDifference[0] == 1){console.log("RIGHT-UP")}
+        //     else if(coordinateDifference[1] == 0 && coordinateDifference[0] == 1){console.log("RIGHT")}
+        //     else if(coordinateDifference[1] == 1 && coordinateDifference[0] == 1){console.log("RIGHT-DOWN")}
+        //     else if(coordinateDifference[1] == 1 && coordinateDifference[0] == 0){console.log("DOWN")}
+        //     else if(coordinateDifference[1] == 1 && coordinateDifference[0] == -1){console.log("LEFT-DOWN")}
+        //     currentNodeCoordinates = node.NodeCoordinates;
+
+                                // switch(coordinateDifference) {
+            //     case [0,-1]:
+            //       console.log("LEFT")
+            //       break;
+            //     case [-1,-1]:
+            //         console.log("LEFT-UP")
+            //       break; 
+            //     case [-1,0]:
+            //         console.log("UP")
+            //       break;
+            //     case [-1,1]:
+            //         console.log("RIGHT-UP")
+            //       break;
+            //     case [0,1]:
+            //         console.log("RIGHT")
+            //     break;
+            //     case [1,1]:
+            //         console.log("RIGHT-DOWN")
+            //     break; 
+            //     case [1,0]:
+            //         console.log("DOWN")
+            //     break;
+            //     case [1,-1]:
+            //         console.log("LEFT-DOWN")
+            //     break;
+            //   }
+
+            // switch(coordinateDifference) {
+            //     case [0,-1]:
+            //       console.log("LEFT")
+            //       break;
+            //     case [-1,-1]:
+            //         console.log("LEFT-UP")
+            //       break; 
+            //     case [-1,0]:
+            //         console.log("UP")
+            //       break;
+            //     case [-1,1]:
+            //         console.log("RIGHT-UP")
+            //       break;
+            //     case [0,1]:
+            //         console.log("RIGHT")
+            //     break;
+            //     case [1,1]:
+            //         console.log("RIGHT-DOWN")
+            //     break; 
+            //     case [1,0]:
+            //         console.log("DOWN")
+            //     break;
+            //     case [1,-1]:
+            //         console.log("LEFT-DOWN")
+            //     break;
+            //   }
+
+
+        //});
+        var tempGrid = aStarGrid
+        closedNodes.forEach(node => {
+            tempGrid[node.NodeCoordinates[0]][node.NodeCoordinates[1]] = "R"
+        });
         console.log("closed nodes:")
-        console.log(closedNodes)
+        console.log(closedNodes);
         console.log(openedNodes);
-        // console.log(aStarGrid);
+        console.log("tempgrid: ")
+        console.log(tempGrid)
     }
 }

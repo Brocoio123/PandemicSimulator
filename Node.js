@@ -10,12 +10,12 @@ class Node{
     }
 
     GCostCalculation = function(){
-        return Math.abs(this.StartingNodeCoordinates[0] - this.NodeCoordinates[0]) + Math.abs(this.StartingNodeCoordinates[1] - this.NodeCoordinates[1])
+        return Math.abs(this.StartingNodeCoordinates[1] - this.NodeCoordinates[1]) + Math.abs(this.StartingNodeCoordinates[0] - this.NodeCoordinates[0])
   
     }
 
     HCostCalculation = function(){
-        return Math.abs(this.endNodeCoordinates[0] - this.NodeCoordinates[0]) + Math.abs(this.endNodeCoordinates[1] - this.NodeCoordinates[1])
+        return Math.abs(this.endNodeCoordinates[1] - this.NodeCoordinates[1]) + Math.abs(this.endNodeCoordinates[0] - this.NodeCoordinates[0])
 
     }
 
