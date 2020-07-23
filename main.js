@@ -10,7 +10,7 @@ screenY = 14;
 screenX = 14;
 // Create one dimensional array 
 var world = new Array(screenX + 1); 
-var turnInterval = 400000; //turn interval in milliseconds
+var turnInterval = 500000; //turn interval in milliseconds
 var personsToSpawn = 1;
 var personsVar = [];
 var groundCharacter = "A";
@@ -69,7 +69,7 @@ function personsUpdateMovement(){
         oldX = personsVar[i].x;
         personsVar[i].nextMove();
         if(personsVar[i].y != oldY || personsVar[i].x != oldX){
-            arrayUpdate(world, oldY , oldX, groundCharacter);
+            arrayUpdate(world, oldX , oldY, groundCharacter);
         }
     } 
 }
@@ -97,8 +97,6 @@ function turnUpdate(){
     arrayDisplay();
 
 }
-
-
 
 console.log(world)
 //display first world
