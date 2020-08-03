@@ -9,13 +9,14 @@
 screenY = 14;
 screenX = 14;
 // Create one dimensional array 
-var world = new Array(screenX + 1); 
-var turnInterval = 500000; //turn interval in milliseconds
-var personsToSpawn = 1;
+var world = new Array(screenX + 1);
+var turnInterval = 1000; //turn interval in milliseconds
+var personsToSpawn = 2;
 var personsVar = [];
 var groundCharacter = "A";
 var shopCharacter = "P";
 var blockerCharacter = "T";
+var personCharacter = "R";
 // Loop to create 2D array using 1D array 
 
 for (var i = 0; i < world.length; i++) { 
@@ -64,6 +65,7 @@ for (var i = 0; i < personsToSpawn; i++) {
 function personsUpdateMovement(){
     var oldY = 0;
     var oldX = 0;
+    //change to foreach
     for (var i = 0; i < personsVar.length; i++) {
         oldY = personsVar[i].y;
         oldX = personsVar[i].x;
@@ -82,7 +84,7 @@ function arrayDisplay(Y = screenY, X = screenX){
             ///////////////////////////////////////////////////////////////////
             ///Why does it displays correctly only when i write world[i][j]?///
             ///////////////////////////////////////////////////////////////////
-                document.getElementById("world").innerHTML += world[i][j] + " ";
+            document.getElementById("world").innerHTML += world[i][j] + " ";
         }
         document.getElementById("world").innerHTML += "<br>";
     }
@@ -92,11 +94,22 @@ function arrayUpdate(array, y, x, content){
     array[y][x] = content;
 }
 
+function calculatePathForAllPersons(personToCalculatePath){
+    // if(personToCalculatePath.moveQueue.length == 0){
+    //     personToCalculatePath.aStarPathFinding();
+    // }
+    personsVar.forEach(person => {
+        person.aStarPathFinding();
+    });
+}
+
 function turnUpdate(){
     personsUpdateMovement();
     arrayDisplay();
-
+    calculatePathForAllPersons();
 }
+
+//function infect(healthyPerson)
 
 console.log(world)
 //display first world
@@ -104,5 +117,3 @@ arrayDisplay()
 
 //update world in 1000 milisecond turns
 setInterval(turnUpdate, turnInterval);
-
-personsVar[0].aStarPathFinding();
