@@ -2,7 +2,9 @@ class Person{
     constructor(y, x){
         this.y = y;
         this.x = x;
-        // this.radius = radius;
+        this.PI = this.calculatePanicIndex();
+        this.CI = this.calculateCautionIndex();
+        this.IC = this.calculateInfectionChance();
         this.status = "healthy";
         const json = '{"shopping":true, "commuting":42, "going home":42}';
         let stringData = JSON.stringify(json);
@@ -28,11 +30,39 @@ class Person{
         delete this;
     }
 
+    attemptToInfect = function(){
+        console.log("Attempting to infect...")
+        console.log("IC: " + this.IC)
+        let infectRand = Math.random() * 100;
+        console.log("infectRand: " + infectRand)
+        if(infectRand <= this.IC){
+            this.status = "infected";
+        }
+    }
+
+    calculatePanicIndex = function(){
+        return 6 + GVTL
+    }
+
+    calculateCautionIndex = function(){
+        return this.PI / (GVTL * 3)
+    }
+
+    //calculate the infection chance of this person
+    //maxInfectionPercentage = (WI+CI+PI)*GVTL
+    calculateInfectionChance = function(){
+        return (this.CI + this.PI) * GVTL
+    }
+
     movePerson = function(direction){
-        //wtf is that? use a switch dipshit        
         switch (direction) {
             case "left":
-                if(this.y != 0 && world[this.x][this.y - 1] != personCharacter){
+                if(this.y != 0){
+                    if(world[this.x][this.y - 1] == personCharacter){
+                        this.moveQueue=[];
+                        this.aStarPathFinding("closest");
+                        return;
+                    }
                     this.y--;
                 }
                 else{
@@ -40,7 +70,12 @@ class Person{
                 }
                 break;
             case "left-up":
-                if(this.y != 0 && this.x != 0 && world[this.x - 1][this.y - 1] != personCharacter){
+                if(this.y != 0 && this.x != 0){
+                    if(world[this.x - 1][this.y - 1] == personCharacter){
+                        this.moveQueue=[];
+                        this.aStarPathFinding("closest");
+                        return;
+                    }
                     this.y--;
                     this.x--;
                 }
@@ -49,7 +84,12 @@ class Person{
                 }
                 break;
             case "up":
-                if(this.x != 0 && world[this.x - 1][this.y] != personCharacter){
+                if(this.x != 0){
+                    if(world[this.x - 1][this.y] == personCharacter){
+                        this.moveQueue=[];
+                        this.aStarPathFinding("closest");
+                        return;
+                    }
                     this.x--;
                 }
                 else{
@@ -57,7 +97,12 @@ class Person{
                 }
                 break;
             case "right-up":
-                if(this.y < (screenY - 1) && this.x != 0 && world[this.x - 1][this.y + 1] != personCharacter){
+                if(this.y < (screenY - 1) && this.x != 0){
+                    if(world[this.x - 1][this.y + 1] == personCharacter){
+                        this.moveQueue=[];
+                        this.aStarPathFinding("closest");
+                        return;
+                    }
                     this.y++;
                     this.x--;
                 }
@@ -66,7 +111,12 @@ class Person{
                 }
                 break;
             case "right":
-                if(this.y < (screenY - 1) && world[this.x][this.y + 1] != personCharacter){
+                if(this.y < (screenY - 1)){
+                    if(world[this.x][this.y + 1] == personCharacter){
+                        this.moveQueue=[];
+                        this.aStarPathFinding("closest");
+                        return;
+                    }
                     this.y++;
                 }
                 else{
@@ -74,7 +124,12 @@ class Person{
                 }
                 break;
             case "right-down":
-                if(this.y < (screenY - 1) && this.x < (screenX - 1) && world[this.x + 1][this.y + 1] != personCharacter){
+                if(this.y < (screenY - 1) && this.x < (screenX - 1)){
+                    if(world[this.x + 1][this.y + 1] == personCharacter){
+                        this.moveQueue=[];
+                        this.aStarPathFinding("closest");
+                        return;
+                    }
                     this.y++;
                     this.x++;
                 }
@@ -83,7 +138,12 @@ class Person{
                 }
                 break;
             case "down":
-                if(this.x < (screenX - 1) && world[this.x + 1][this.y] != personCharacter){
+                if(this.x < (screenX - 1)){
+                    if(world[this.x + 1][this.y] == personCharacter){
+                        this.moveQueue=[];
+                        this.aStarPathFinding("closest");
+                        return;
+                    }
                     this.x++;
                 }
                 else{
@@ -91,7 +151,12 @@ class Person{
                 }
                 break;
             case "left-down":
-                if(this.y != 0 && this.x < (screenX - 1) && world[this.x][this.y - 1] != personCharacter){
+                if(this.y != 0 && this.x < (screenX - 1)){
+                    if(world[this.x][this.y - 1] == personCharacter){
+                        this.moveQueue=[];
+                        this.aStarPathFinding("closest");
+                        return;
+                    }
                     this.y--;
                     this.x++;
                 }
@@ -100,44 +165,56 @@ class Person{
                 }
                 break;
           }
+          personsPositions.push([this.y, this.x]);
     }
 
-    aStarPathFinding = function(){
+    //Algorithm to find the shortest path to its destination
+    //destination should be either "random" or "closest"
+    aStarPathFinding = function(destination = "closest"){
         var aStarGrid = new Array(screenY + 1);
         var openedNodes = new Array();
         var closedNodes = new Array();
         var currentNodeCoordinates = [this.x, this.y];
         var pathEnd = false;
         var nextNodeToClose = openedNodes[0];
-        for (var i = 0; i < aStarGrid.length; i++) { 
-            aStarGrid[i] = [30]; 
+        for (var i = 0; i < aStarGrid.length; i++) {
+            aStarGrid[i] = [30];
         }
         
         var shopNodes = new Array();
         var e = 0;
 
-        //closest shop is selected as the end node
+        //Shop is selected as the end node based on closeness to the Person or randomness
         for (var i = 0; i < screenY; i++) {
             for (var j = 0; j < screenX; j++) {
                 if(world[j][i] == shopCharacter){
                     shopNodes[e] = [j,i];
                     e++;
                 }
-            } 
-        } 
-
-        var ClosestShopCoordinates = shopNodes[0];
-        shopNodes.forEach(shopCoordinates => {
-            if(Math.abs(shopCoordinates[1] - this.y) + Math.abs(shopCoordinates[0] - this.x) < Math.abs(ClosestShopCoordinates[1] - this.y) + Math.abs(ClosestShopCoordinates[0] - this.x)){
-                ClosestShopCoordinates = shopCoordinates;
             }
-        });
+        }
 
-        //adding the blockers
+        var ClosestShopCoordinates
+        if(destination == "closest"){
+            ClosestShopCoordinates = shopNodes[0];
+            console.log(shopNodes)
+            shopNodes.forEach(shopCoordinates => {
+                if(Math.abs(shopCoordinates[1] - this.y) + Math.abs(shopCoordinates[0] - this.x) < Math.abs(ClosestShopCoordinates[1] - this.y) + Math.abs(ClosestShopCoordinates[0] - this.x)){
+                    ClosestShopCoordinates = shopCoordinates;
+                }
+            });
+        }else if(destination == "random"){
+            let randDestIndex = Math.round(Math.random() * (shopNodes.length - 1))
+            console.log(randDestIndex)
+            ClosestShopCoordinates = shopNodes[randDestIndex];
+            console.log(ClosestShopCoordinates)
+        }
+
+        //adding the nodes
         for (var i = 0; i < screenY; i++) { 
             for (var j = 0; j < screenX; j++) { 
                 aStarGrid[j][i] = new Node([j, i], [this.x, this.y], ClosestShopCoordinates);
-                //blockers
+                //adding the blockers
                 if(world[j][i] == "T"){
                     aStarGrid[j][i] = "T";
                 }
@@ -150,13 +227,14 @@ class Person{
         //closing the first node
         aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]].status = "closed";
 
+        console.log(aStarGrid);
         //a star main loop
         while(true){
             for (var i = 0; i < 8; i++) {
                 switch(i) {
                     //left
                     case 0:
-                        if(aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]-1] != undefined && aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]-1] != "T" && aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]-1] != shopCharacter && aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]-1].status != "closed" && aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]-1].status != "open"){
+                        if(aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]-1] != undefined && aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]-1] != "T" && world[currentNodeCoordinates[0]][currentNodeCoordinates[1]-1] != personCharacter && aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]-1] != shopCharacter && aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]-1].status != "closed" && aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]-1].status != "open"){
                             aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]-1].status = "open";
                             openedNodes.push(aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]-1]);
                         }
@@ -164,7 +242,7 @@ class Person{
                         break;
                     //left-up
                     case 1:
-                        if(currentNodeCoordinates[0] != 0 && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]-1] != undefined && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]-1] != "T" && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]-1] != shopCharacter && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]-1].status != "closed" && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]-1].status != "open"){
+                        if(currentNodeCoordinates[0] != 0 && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]-1] != undefined && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]-1] != "T" && world[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]-1] != personCharacter && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]-1] != shopCharacter && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]-1].status != "closed" && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]-1].status != "open"){
                             aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]-1].status = "open";
                             openedNodes.push(aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]-1]);
                         }
@@ -172,7 +250,7 @@ class Person{
                         break;
                     //up
                     case 2:
-                        if(currentNodeCoordinates[0] != 0 && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]] != undefined && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]] != "T" && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]] != shopCharacter && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]].status != "closed" && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]].status != "open"){
+                        if(currentNodeCoordinates[0] != 0 && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]] != undefined && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]] != "T" && world[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]] != personCharacter && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]] != shopCharacter && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]].status != "closed" && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]].status != "open"){
                             aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]].status = "open";
                             openedNodes.push(aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]]);
                         }
@@ -180,7 +258,7 @@ class Person{
                         break;
                     //right-up
                     case 3:
-                        if(currentNodeCoordinates[0] != 0 && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]+1] != undefined && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]+1] != "T" && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]+1] != shopCharacter && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]+1].status != "closed" && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]+1].status != "open"){
+                        if(currentNodeCoordinates[0] != 0 && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]+1] != undefined && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]+1] != "T" && world[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]+1] != personCharacter && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]+1] != shopCharacter && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]+1].status != "closed" && aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]+1].status != "open"){
                             aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]+1].status = "open";
                             openedNodes.push(aStarGrid[currentNodeCoordinates[0]-1][currentNodeCoordinates[1]+1]);
                         }
@@ -188,7 +266,7 @@ class Person{
                         break;
                     //right
                     case 4:
-                        if(aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]+1] != undefined && aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]+1] != "T" && aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]+1] != shopCharacter && aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]+1].status != "closed" && aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]+1].status != "open"){
+                        if(aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]+1] != undefined && aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]+1] != "T" && world[currentNodeCoordinates[0]][currentNodeCoordinates[1]+1] != personCharacter && aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]+1] != shopCharacter && aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]+1].status != "closed" && aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]+1].status != "open"){
                             aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]+1].status = "open";
                             openedNodes.push(aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]+1]);
                         }
@@ -196,7 +274,7 @@ class Person{
                         break;
                     //right-down
                     case 5:
-                        if(aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]+1] != undefined && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]+1] != "T" && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]+1] != shopCharacter && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]+1] != 30 && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]+1].status != "closed" && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]+1].status != "open"){
+                        if(aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]+1] != undefined && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]+1] != "T" && world[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]+1] != personCharacter && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]+1] != shopCharacter && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]+1] != 30 && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]+1].status != "closed" && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]+1].status != "open"){
                             aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]+1].status = "open";
                             openedNodes.push(aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]+1]);
                         }
@@ -204,7 +282,7 @@ class Person{
                         break;
                     //down
                     case 6:
-                        if(aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]] != undefined && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]] != "T" && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]] != shopCharacter && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]] != 30 && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]].status != "closed" && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]].status != "open"){
+                        if(aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]] != undefined && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]] != "T" && world[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]] != personCharacter && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]] != shopCharacter && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]] != 30 && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]].status != "closed" && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]].status != "open"){
                             aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]].status = "open";
                             openedNodes.push(aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]]);
                         }
@@ -212,7 +290,7 @@ class Person{
                         break;
                     //left-down
                     case 7:
-                        if(aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]-1] != undefined && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]-1] != "T" && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]-1] != shopCharacter && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]-1] != 30 && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]-1].status != "closed" && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]-1].status != "open"){
+                        if(aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]-1] != undefined && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]-1] != "T" && world[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]-1] != personCharacter && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]-1] != shopCharacter && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]-1] != 30 && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]-1].status != "closed" && aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]-1].status != "open"){
                             aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]-1].status = "open";
                             openedNodes.push(aStarGrid[currentNodeCoordinates[0]+1][currentNodeCoordinates[1]-1]);
                         }
@@ -273,7 +351,7 @@ class Person{
         catch(TypeError) {
             console.log("catched!")
             console.log("person deleted!")
-            this.deletePerson();
+            //this.deletePerson();
             return;
         }
 
@@ -358,7 +436,7 @@ class Person{
                 scanOut.forEach(node => {
                     if(node.GCost < previousNode.GCost){
                         currentNodeInversePath = node;
-                        iPreviousNode++
+                        iPreviousNode++;
                         iPreviousNodeToChoose = iPreviousNode;
                     }else{
                         iPreviousNode++
@@ -409,6 +487,7 @@ class Person{
         });
         this.moveQueue = finalPath.reverse()
         console.log(finalPath)
+        console.log("PATH CALCULATED!!!!")
         return;
     }
 }

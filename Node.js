@@ -15,6 +15,12 @@ class Node{
     }
 
     HCostCalculation = function(){
+        console.log("endNodeCoordinates:")
+        console.log(this.endNodeCoordinates)
+        console.log("NodeCoordinates:")
+        console.log(this.NodeCoordinates)
+
+
         return Math.abs(this.endNodeCoordinates[1] - this.NodeCoordinates[1]) + Math.abs(this.endNodeCoordinates[0] - this.NodeCoordinates[0])
 
     }
