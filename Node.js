@@ -1,3 +1,4 @@
+//the name of this class is Node.js not because of the library, but because thats how a* pathfinding units are generally called
 class Node{
     constructor(NodeCoordinates, StartingNodeCoordinates, endNodeCoordinates){
         this.NodeCoordinates = NodeCoordinates;
@@ -15,10 +16,10 @@ class Node{
     }
 
     HCostCalculation = function(){
-        console.log("endNodeCoordinates:")
-        console.log(this.endNodeCoordinates)
-        console.log("NodeCoordinates:")
-        console.log(this.NodeCoordinates)
+        // console.log("endNodeCoordinates:")
+        // console.log(this.endNodeCoordinates)
+        // console.log("NodeCoordinates:")
+        // console.log(this.NodeCoordinates)
 
 
         return Math.abs(this.endNodeCoordinates[1] - this.NodeCoordinates[1]) + Math.abs(this.endNodeCoordinates[0] - this.NodeCoordinates[0])

@@ -37,6 +37,8 @@ class Person{
         console.log("infectRand: " + infectRand)
         if(infectRand <= this.IC){
             this.status = "infected";
+            numberOfInfected ++;
+            console.log("numberOfInfected: " + numberOfInfected)
         }
     }
 

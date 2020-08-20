@@ -8,15 +8,19 @@
 //For now only identical values, fix later
 screenY = 14;
 screenX = 14;
+
 // Create one dimensional array 
 var world = new Array(screenX + 1);
 var turnInterval = 1000; //turn interval in milliseconds
-var personsToSpawn = 2;
 var personsVar = [];
 var groundCharacter = "A";
 var shopCharacter = "P";
 var blockerCharacter = "T";
 var personCharacter = "R";
+var numberOfInfected = 0;
+var personsOnScreen = 2; //have it be modifiable by an event such as a lockdown event.
+var population = 800000;//800 000  5% of those are on the streets
+var nonActiveScreens = 100
 
 //global virus threat level(between 0 and 1)
 var GVTL = 0.9
@@ -35,7 +39,8 @@ for (var i = 0; i < screenY; i++) {
   
         world[j][i] = "A";
     } 
-} 
+}
+
 //initialize shop
 arrayUpdate(world, 2, 0, shopCharacter);
 //arrayUpdate(world, 24, 23, shopCharacter);
@@ -56,7 +61,7 @@ arrayUpdate(world, 13, 3, blockerCharacter);
 arrayUpdate(world, 12, 12, shopCharacter);
 
 //Spawn persons
-for (var i = 0; i < personsToSpawn; i++) { 
+for (var i = 0; i < personsOnScreen; i++) { 
     var randX = Math.floor(Math.random() * (screenX));
     var randY = Math.floor(Math.random() * (screenY));
     while(world[randY][randX] == "T" || world[randY][randX] == "P"){
