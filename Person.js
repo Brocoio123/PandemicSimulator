@@ -19,7 +19,7 @@ class Person{
 
     nextMove = function(){
         var i = this.moveQueue.pop();
-        console.log("next move: " + i);
+        //console.log("next move: " + i);
 
         this.movePerson(i);
         arrayUpdate(world, this.x, this.y, personCharacter);
@@ -37,7 +37,9 @@ class Person{
         console.log("infectRand: " + infectRand)
         if(infectRand <= this.IC){
             this.status = "infected";
-            numberOfInfected ++;
+            numberOfHealthy--;
+            numberOfInfected++;
+            infectedInCycle++;
             console.log("numberOfInfected: " + numberOfInfected)
         }
     }
@@ -329,7 +331,8 @@ class Person{
 
             nextNodeToClose.status = "closed";
             closedNodes.push(nextNodeToClose);
-            openedNodes[iOpenNodeToDelete] = undefined;
+            //linha desnecessaria?
+            //openedNodes[iOpenNodeToDelete] = undefined;
             currentNodeCoordinates = nextNodeToClose.NodeCoordinates;
         }
 
@@ -488,8 +491,8 @@ class Person{
               }
         });
         this.moveQueue = finalPath.reverse()
-        console.log(finalPath)
-        console.log("PATH CALCULATED!!!!")
+        //console.log(finalPath)
+        //console.log("PATH CALCULATED!!!!")
         return;
     }
 }

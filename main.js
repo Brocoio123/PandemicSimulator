@@ -6,8 +6,8 @@
 //            P:Shops
 //            T:blockers
 //For now only identical values, fix later
-screenY = 14;
-screenX = 14;
+screenY = 15;
+screenX = 15;
 
 // Create one dimensional array 
 var world = new Array(screenX + 1);
@@ -18,9 +18,33 @@ var shopCharacter = "P";
 var blockerCharacter = "T";
 var personCharacter = "R";
 var numberOfInfected = 0;
-var personsOnScreen = 2; //have it be modifiable by an event such as a lockdown event.
+var personsOnScreen = 8; //have it be modifiable by an event such as a lockdown event. //user input
 var population = 800000;//800 000  5% of those are on the streets
-var nonActiveScreens = 100
+var numberOfHealthy = population;
+var nonActiveScreens = 100;
+var po = calculateNumberOfPeopleOutdoors(); //po : population outdoors. Percentage of the population that are outdoors
+var ns = calculateNumberOfScreens();
+var osi = 0; //offscreen infections
+var cycle = 0;
+var infectedInCycle = 0;
+var cyclesToReset = 10;
+var outdoorInfectionRate = calculateOutdoorInfectionRate();
+
+function calculateNumberOfPeopleOutdoors(){
+    return population * 0.05; //0.05% is the percentage of the population that are outdoors at any given time on average
+}
+
+function calculateNumberOfScreens(){
+    return po / personsOnScreen;
+}
+
+function calculateOutdoorInfectionRate(){
+    return (infectedInCycle / (cyclesToReset * personsOnScreen)) * 10
+}
+
+function calculateOffScreenInfectionsInCycle(){
+    return ((population - po) / 100) * outdoorInfectionRate
+}
 
 //global virus threat level(between 0 and 1)
 var GVTL = 0.9
@@ -43,9 +67,10 @@ for (var i = 0; i < screenY; i++) {
 
 //initialize shop
 arrayUpdate(world, 2, 0, shopCharacter);
-//arrayUpdate(world, 24, 23, shopCharacter);
+arrayUpdate(world, 3, 7, shopCharacter);
+arrayUpdate(world, 8, 8, shopCharacter);
+//initialize blockers
 arrayUpdate(world, 1, 1, blockerCharacter);
-arrayUpdate(world, 3, 1, blockerCharacter);
 arrayUpdate(world, 4, 1, blockerCharacter);
 arrayUpdate(world, 5, 1, blockerCharacter);
 arrayUpdate(world, 6, 1, blockerCharacter);
@@ -53,12 +78,6 @@ arrayUpdate(world, 7, 1, blockerCharacter);
 arrayUpdate(world, 6, 3, blockerCharacter);
 arrayUpdate(world, 7, 3, blockerCharacter);
 arrayUpdate(world, 8, 3, blockerCharacter);
-arrayUpdate(world, 9, 3, blockerCharacter);
-arrayUpdate(world, 10, 3, blockerCharacter);
-arrayUpdate(world, 11, 3, blockerCharacter);
-arrayUpdate(world, 12, 3, blockerCharacter);
-arrayUpdate(world, 13, 3, blockerCharacter);
-arrayUpdate(world, 12, 12, shopCharacter);
 
 //Spawn persons
 for (var i = 0; i < personsOnScreen; i++) { 
@@ -153,21 +172,35 @@ function InfectAdjacentPersons(){
 }
 
 function turnUpdate(){
+    cycle++;
+    if(cycle == cyclesToReset){
+        infectedInCycle = infectedInCycle + calculateOffScreenInfectionsInCycle();
+        numberOfInfected = numberOfInfected + infectedInCycle;
+        numberOfHealthy = numberOfHealthy - cycleInfections;
+        //reset persons on screen
+        infectedInCycle = 0;
+    }
+
     resetThePersonsPositions();
     personsUpdateMovement();
     arrayDisplay();
     calculatePathForAllPersons();
     InfectAdjacentPersons();
     console.log(personsPositions);
-    console.log(world)
-    console.log(personsVar[0].status);
-    console.log(personsVar[1].status);
+    console.log(world);
+    personsVar.forEach(person => {
+        console.log(person.status);
+
+    });
+    console.log("numberOfHealthy: " + numberOfHealthy)
+    console.log("numberOfInfected: " + numberOfInfected)
 
 }
 
 //function infect(healthyPerson)
 
 console.log(world)
+
 //display first world
 arrayDisplay()
 
