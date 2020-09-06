@@ -1,6 +1,7 @@
 var canvasPersons = [];
 
 var canvas = document.querySelector('canvas');
+var canvasContext = canvas.getContext('2d');
 
 //redo this smarter
 var scaleFactor = 2;
@@ -17,19 +18,13 @@ drawCanvasPerson()
 
 canvas.addEventListener('click', bringPersonInformation, false);
 setInterval(animateSpriteCanvasPersons, (300));
-setInterval(drawCanvasPersons, (15));
+setInterval(drawCanvasPersons, ((turnInterval/65)-((turnInterval/65)*0.25)));
 
 function drawCanvasPersons(){
-    clearScreen()
+    canvasContext.clearRect(0, 0, canvas.width, canvas.height);
     canvasPersons.forEach(canvasPerson => {
         canvasPerson.draw()
     });
-}
-
-function clearScreen(){
-    console.log("LELEELELELELELLELELELEL")
-    let canvasContext = canvas.getContext('2d');
-    canvasContext.clearRect(0, 0, innerWidth, innerHeight);
 }
 
 function animateCanvasPersons(){

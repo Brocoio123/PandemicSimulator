@@ -175,7 +175,7 @@ class Person{
                 }
                 break;
           }
-          console.log(this.currentMovementVector)
+        //   console.log(this.currentMovementVector)
           personsPositions.push([this.y, this.x]);
     }
 

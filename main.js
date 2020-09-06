@@ -11,14 +11,14 @@ screenX = 15;
 
 // Create one dimensional array 
 var world = new Array(screenX + 1);
-var turnInterval = 3260; //turn interval in milliseconds //3260
+var turnInterval = 1000; //turn interval in milliseconds //3260
 var personsVar = [];
 var groundCharacter = "A";
 var shopCharacter = "P";
 var blockerCharacter = "T";
 var personCharacter = "R";
 var numberOfInfected = 0;
-var personsOnScreen = 10; //have it be modifiable by an event such as a lockdown event. //user input
+var personsOnScreen = 1; //have it be modifiable by an event such as a lockdown event. //user input
 var population = 800000;//800 000  5% of those are on the streets
 var numberOfHealthy = population;
 var nonActiveScreens = 100;
@@ -69,7 +69,7 @@ for (var i = 0; i < screenY; i++) {
 //initialize shop
 arrayUpdate(world, 2, 0, shopCharacter);
 arrayUpdate(world, 3, 7, shopCharacter);
-arrayUpdate(world, 13, 13, shopCharacter);
+arrayUpdate(world, 14, 13, shopCharacter);
 //initialize blockers
 arrayUpdate(world, 1, 1, blockerCharacter);
 arrayUpdate(world, 4, 1, blockerCharacter);
@@ -162,9 +162,9 @@ function InfectAdjacentPersons(){
     });
 
     adjacentPersonsCoordinates.forEach(adjacentPersonCoordinates => {
-        console.log(adjacentPersonCoordinates)
+        // console.log(adjacentPersonCoordinates)
         personObject = findPersonByCoordinates(adjacentPersonCoordinates[1], adjacentPersonCoordinates[0]);
-        console.log(personObject)
+        // console.log(personObject)
     });
     if(personObject != undefined){
         personObject.attemptToInfect();
