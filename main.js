@@ -11,14 +11,14 @@ screenX = 15;
 
 // Create one dimensional array 
 var world = new Array(screenX + 1);
-var turnInterval = 1000; //turn interval in milliseconds
+var turnInterval = 3260; //turn interval in milliseconds //3260
 var personsVar = [];
 var groundCharacter = "A";
 var shopCharacter = "P";
 var blockerCharacter = "T";
 var personCharacter = "R";
 var numberOfInfected = 0;
-var personsOnScreen = 8; //have it be modifiable by an event such as a lockdown event. //user input
+var personsOnScreen = 10; //have it be modifiable by an event such as a lockdown event. //user input
 var population = 800000;//800 000  5% of those are on the streets
 var numberOfHealthy = population;
 var nonActiveScreens = 100;
@@ -29,6 +29,7 @@ var cycle = 0;
 var infectedInCycle = 0;
 var cyclesToReset = 10;
 var outdoorInfectionRate = calculateOutdoorInfectionRate();
+var turnPassed = false;
 
 function calculateNumberOfPeopleOutdoors(){
     return population * 0.05; //0.05% is the percentage of the population that are outdoors at any given time on average
@@ -68,7 +69,7 @@ for (var i = 0; i < screenY; i++) {
 //initialize shop
 arrayUpdate(world, 2, 0, shopCharacter);
 arrayUpdate(world, 3, 7, shopCharacter);
-arrayUpdate(world, 8, 8, shopCharacter);
+arrayUpdate(world, 13, 13, shopCharacter);
 //initialize blockers
 arrayUpdate(world, 1, 1, blockerCharacter);
 arrayUpdate(world, 4, 1, blockerCharacter);
@@ -87,7 +88,7 @@ for (var i = 0; i < personsOnScreen; i++) {
         randX = Math.floor(Math.random() * (screenX));
         randY = Math.floor(Math.random() * (screenY));
     }
-    personsVar[i] = new Person(randX, randY);
+    personsVar[i] = new Person(randX, randY, i);
 } 
 
 function personsUpdateMovement(){
@@ -172,6 +173,7 @@ function InfectAdjacentPersons(){
 }
 
 function turnUpdate(){
+    turnPassed = true;
     cycle++;
     if(cycle == cyclesToReset){
         infectedInCycle = infectedInCycle + calculateOffScreenInfectionsInCycle();
@@ -180,21 +182,14 @@ function turnUpdate(){
         //reset persons on screen
         infectedInCycle = 0;
     }
-
+    updatePreviousPositionValues();
     resetThePersonsPositions();
     personsUpdateMovement();
     arrayDisplay();
     calculatePathForAllPersons();
     InfectAdjacentPersons();
-    console.log(personsPositions);
-    console.log(world);
-    personsVar.forEach(person => {
-        console.log(person.status);
-
-    });
-    console.log("numberOfHealthy: " + numberOfHealthy)
-    console.log("numberOfInfected: " + numberOfInfected)
-
+    synchronizePersonsAndCanvasPersons()
+    animateCanvasPersons();
 }
 
 //function infect(healthyPerson)

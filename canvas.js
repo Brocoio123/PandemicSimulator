@@ -5,28 +5,70 @@ var canvas = document.querySelector('canvas');
 //redo this smarter
 var scaleFactor = 2;
 
+//pseudo bounding boxes/colliders
 CellXSize = 24*scaleFactor;
 CellYSize = 32*scaleFactor;
 
 canvas.height = 480*scaleFactor
 canvas.width = 360*scaleFactor
 
-
-console.log(canvas.width)
-console.log(canvas.height)
-
 spawnCanvasPersons();
 drawCanvasPerson()
 
 canvas.addEventListener('click', bringPersonInformation, false);
+setInterval(animateSpriteCanvasPersons, (300));
+setInterval(drawCanvasPersons, (15));
+
+function drawCanvasPersons(){
+    clearScreen()
+    canvasPersons.forEach(canvasPerson => {
+        canvasPerson.draw()
+    });
+}
+
+function clearScreen(){
+    console.log("LELEELELELELELLELELELEL")
+    let canvasContext = canvas.getContext('2d');
+    canvasContext.clearRect(0, 0, innerWidth, innerHeight);
+}
+
+function animateCanvasPersons(){
+    canvasPersons.forEach(canvasPerson => {
+        canvasPerson.moveCanvasPerson()
+    });
+}
+
+function animateSpriteCanvasPersons(){
+    canvasPersons.forEach(canvasPerson => {
+        canvasPerson.changeSprite(canvasPerson.animationFrame);
+    });
+}
+
+function updatePreviousPositionValues(){
+    canvasPersons.forEach(canvasPerson => {
+        canvasPerson.updatePreviousVars();
+    });
+}
 
 function bringPersonInformation(e) {
     mousePos = getMousePos(canvas, e);
     console.log(mousePos.x)
     console.log(mousePos.y)
-    // canvasPersons.forEach(canvasPerson => {
-    //     if(canvasPerson.)
-    // });
+    canvasPersons.forEach(canvasPerson => {
+        // console.log("mousePos.x: " + mousePos.x)
+        // console.log("cP.x*CXS: " + ((canvasPerson.y*CellYSize)-(canvasPerson.y*CellYSize/4)))
+        // console.log("((cP.x*CXS) + CXS): " + (((canvasPerson.y*CellYSize)-(canvasPerson.y*CellYSize/4)+CellXSize)))
+
+        // console.log("mousePos.y: " + mousePos.y)
+        // console.log("cP.y*CYS: " + ((canvasPerson.x*CellXSize)+(canvasPerson.x*CellXSize/3)))//((mousePos.x*CellXSize)+(mousePos.x*CellXSize/3)))
+        // console.log("((cP.y*CYS) + CYS): " + (((canvasPerson.x*CellXSize)+(canvasPerson.x*CellXSize/3))+CellYSize))
+
+        if(mousePos.x > ((canvasPerson.y*CellYSize)-(canvasPerson.y*CellYSize/4)) && mousePos.x < ((canvasPerson.y*CellYSize)-(canvasPerson.y*CellYSize/4)+CellXSize)){
+            if(mousePos.y > ((canvasPerson.x*CellXSize)+(canvasPerson.x*CellXSize/3)) && mousePos.y < (((canvasPerson.x*CellXSize)+(canvasPerson.x*CellXSize/3))+CellYSize)){
+                console.log("canvasPerson id is: " + canvasPerson.id)
+            }
+        }
+    });
 }
 
 function getMousePos(canvas, evt) {
@@ -39,16 +81,21 @@ function getMousePos(canvas, evt) {
 
 function spawnCanvasPersons(){
         for (var i = 0; i < personsVar.length; i++) { 
-        // var randX = Math.floor(Math.random() * (screenX));
-        // var randY = Math.floor(Math.random() * (screenY));
-        // while(world[randY][randX] == "T" || world[randY][randX] == "P"){
-        //     randX = Math.floor(Math.random() * (screenX));
-        //     randY = Math.floor(Math.random() * (screenY));
-        // }
-        // console.log(this.randX)
-        // console.log(this.randY)
+        canvasPersons[i] = new canvasPerson(personsVar[i].y, personsVar[i].x, personsVar[i].id);
+    }
+}
 
-        canvasPersons[i] = new canvasPerson(personsVar[i].y, personsVar[i].x, i);
+function synchronizePersonsAndCanvasPersons(){
+    for (var i = 0; i < canvasPersons.length; i++) {
+        for (var e = 0; e < personsVar.length; e++) {
+            if(canvasPersons[i].id == personsVar[e].id){
+                canvasPersons[i].x = personsVar[e].x;
+                canvasPersons[i].y = personsVar[e].y;
+                canvasPersons[i].XOffset = personsVar[i].currentMovementVector[0];
+                canvasPersons[i].YOffset = personsVar[i].currentMovementVector[1];
+                break;
+            }
+        }
     }
 }
 

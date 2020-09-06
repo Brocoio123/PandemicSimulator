@@ -1,19 +1,16 @@
 class Person{
-    constructor(y, x){
+    constructor(y, x, id){
         this.y = y;
         this.x = x;
+        this.id = id;
         this.PI = this.calculatePanicIndex();
         this.CI = this.calculateCautionIndex();
         this.IC = this.calculateInfectionChance();
         this.status = "healthy";
-        const json = '{"shopping":true, "commuting":42, "going home":42}';
-        let stringData = JSON.stringify(json);
-        const obj = JSON.parse(stringData);
-
         this.action = "";
-        console.log("Person created");
+        // console.log("Person created");
         arrayUpdate(world, this.x, this.y, personCharacter);
-
+        this.currentMovementVector = []
         this.moveQueue = [];
     }
 
@@ -31,16 +28,16 @@ class Person{
     }
 
     attemptToInfect = function(){
-        console.log("Attempting to infect...")
-        console.log("IC: " + this.IC)
+        // console.log("Attempting to infect...")
+        // console.log("IC: " + this.IC)
         let infectRand = Math.random() * 100;
-        console.log("infectRand: " + infectRand)
+        // console.log("infectRand: " + infectRand)
         if(infectRand <= this.IC){
             this.status = "infected";
             numberOfHealthy--;
             numberOfInfected++;
             infectedInCycle++;
-            console.log("numberOfInfected: " + numberOfInfected)
+            // console.log("numberOfInfected: " + numberOfInfected)
         }
     }
 
@@ -68,6 +65,7 @@ class Person{
                         return;
                     }
                     this.y--;
+                    this.currentMovementVector = [0, -1]
                 }
                 else{
                     this.moveQueue.push("left");
@@ -82,6 +80,8 @@ class Person{
                     }
                     this.y--;
                     this.x--;
+                    this.currentMovementVector = [-1, -1]
+
                 }
                 else{
                     this.moveQueue.push("left-up");
@@ -95,6 +95,7 @@ class Person{
                         return;
                     }
                     this.x--;
+                    this.currentMovementVector = [-1, 0]
                 }
                 else{
                     this.moveQueue.push("up");
@@ -109,6 +110,7 @@ class Person{
                     }
                     this.y++;
                     this.x--;
+                    this.currentMovementVector = [-1, 1]
                 }
                 else{
                     this.moveQueue.push("right-up");
@@ -122,6 +124,7 @@ class Person{
                         return;
                     }
                     this.y++;
+                    this.currentMovementVector = [0, 1]
                 }
                 else{
                     this.moveQueue.push("right");
@@ -136,6 +139,7 @@ class Person{
                     }
                     this.y++;
                     this.x++;
+                    this.currentMovementVector = [1, 1]
                 }
                 else{
                     this.moveQueue.push("right-down");
@@ -149,6 +153,7 @@ class Person{
                         return;
                     }
                     this.x++;
+                    this.currentMovementVector = [1, 0]
                 }
                 else{
                     this.moveQueue.push("down");
@@ -163,12 +168,14 @@ class Person{
                     }
                     this.y--;
                     this.x++;
+                    this.currentMovementVector = [1, -1]
                 }
                 else{
                     this.moveQueue.push("left-down");
                 }
                 break;
           }
+          console.log(this.currentMovementVector)
           personsPositions.push([this.y, this.x]);
     }
 
@@ -201,7 +208,7 @@ class Person{
         var ClosestShopCoordinates
         if(destination == "closest"){
             ClosestShopCoordinates = shopNodes[0];
-            console.log(shopNodes)
+            // console.log(shopNodes)
             shopNodes.forEach(shopCoordinates => {
                 if(Math.abs(shopCoordinates[1] - this.y) + Math.abs(shopCoordinates[0] - this.x) < Math.abs(ClosestShopCoordinates[1] - this.y) + Math.abs(ClosestShopCoordinates[0] - this.x)){
                     ClosestShopCoordinates = shopCoordinates;
@@ -209,9 +216,9 @@ class Person{
             });
         }else if(destination == "random"){
             let randDestIndex = Math.round(Math.random() * (shopNodes.length - 1))
-            console.log(randDestIndex)
+            // console.log(randDestIndex)
             ClosestShopCoordinates = shopNodes[randDestIndex];
-            console.log(ClosestShopCoordinates)
+            // console.log(ClosestShopCoordinates)
         }
 
         //adding the nodes
@@ -231,7 +238,7 @@ class Person{
         //closing the first node
         aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]].status = "closed";
 
-        console.log(aStarGrid);
+        // (aStarGrid);
         //a star main loop
         while(true){
             for (var i = 0; i < 8; i++) {
@@ -346,16 +353,16 @@ class Person{
         var previousNode;
         var iPreviousNode;
         var aStarGridTemp = aStarGrid.slice(0);
-        console.log(currentNodeInversePath)
-        console.log(closedNodesTemp)
+        // console.log(currentNodeInversePath)
+        // console.log(closedNodesTemp)
         
         //Spawned in a invalid dead-end node sqm
         try {
             aStarGridTemp[currentNodeInversePath.NodeCoordinates[0]][currentNodeInversePath.NodeCoordinates[1]] = undefined;
         }
         catch(TypeError) {
-            console.log("catched!")
-            console.log("person deleted!")
+            // console.log("catched!")
+            // console.log("person deleted!")
             //this.deletePerson();
             return;
         }
