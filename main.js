@@ -30,6 +30,7 @@ var infectedInCycle = 0;
 var cyclesToReset = 10;
 var outdoorInfectionRate = calculateOutdoorInfectionRate();
 var turnPassed = false;
+var nbOfSprites = 6;
 
 function calculateNumberOfPeopleOutdoors(){
     return population * 0.05; //0.05% is the percentage of the population that are outdoors at any given time on average
@@ -84,11 +85,12 @@ arrayUpdate(world, 8, 3, blockerCharacter);
 for (var i = 0; i < personsOnScreen; i++) { 
     var randX = Math.floor(Math.random() * (screenX));
     var randY = Math.floor(Math.random() * (screenY));
+    var randSpriteId = Math.floor(Math.random() * (nbOfSprites));
     while(world[randY][randX] == "T" || world[randY][randX] == "P"){
         randX = Math.floor(Math.random() * (screenX));
         randY = Math.floor(Math.random() * (screenY));
     }
-    personsVar[i] = new Person(randX, randY, i);
+    personsVar[i] = new Person(randX, randY, i, randSpriteId);
 } 
 
 function personsUpdateMovement(){

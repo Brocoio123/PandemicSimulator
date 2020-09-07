@@ -1,8 +1,9 @@
 class Person{
-    constructor(y, x, id){
+    constructor(y, x, id, spriteId){
         this.y = y;
         this.x = x;
         this.id = id;
+        this.spriteId = spriteId;
         this.PI = this.calculatePanicIndex();
         this.CI = this.calculateCautionIndex();
         this.IC = this.calculateInfectionChance();

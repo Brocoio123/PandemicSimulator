@@ -50,14 +50,6 @@ function bringPersonInformation(e) {
     console.log(mousePos.x)
     console.log(mousePos.y)
     canvasPersons.forEach(canvasPerson => {
-        // console.log("mousePos.x: " + mousePos.x)
-        // console.log("cP.x*CXS: " + ((canvasPerson.y*CellYSize)-(canvasPerson.y*CellYSize/4)))
-        // console.log("((cP.x*CXS) + CXS): " + (((canvasPerson.y*CellYSize)-(canvasPerson.y*CellYSize/4)+CellXSize)))
-
-        // console.log("mousePos.y: " + mousePos.y)
-        // console.log("cP.y*CYS: " + ((canvasPerson.x*CellXSize)+(canvasPerson.x*CellXSize/3)))//((mousePos.x*CellXSize)+(mousePos.x*CellXSize/3)))
-        // console.log("((cP.y*CYS) + CYS): " + (((canvasPerson.x*CellXSize)+(canvasPerson.x*CellXSize/3))+CellYSize))
-
         if(mousePos.x > ((canvasPerson.y*CellYSize)-(canvasPerson.y*CellYSize/4)) && mousePos.x < ((canvasPerson.y*CellYSize)-(canvasPerson.y*CellYSize/4)+CellXSize)){
             if(mousePos.y > ((canvasPerson.x*CellXSize)+(canvasPerson.x*CellXSize/3)) && mousePos.y < (((canvasPerson.x*CellXSize)+(canvasPerson.x*CellXSize/3))+CellYSize)){
                 console.log("canvasPerson id is: " + canvasPerson.id)
@@ -76,7 +68,8 @@ function getMousePos(canvas, evt) {
 
 function spawnCanvasPersons(){
         for (var i = 0; i < personsVar.length; i++) { 
-        canvasPersons[i] = new canvasPerson(personsVar[i].y, personsVar[i].x, personsVar[i].id);
+        canvasPersons[i] = new canvasPerson(personsVar[i].y, personsVar[i].x, personsVar[i].id, personsVar[i].spriteId);
+        console.log(personsVar[i].spriteId)
     }
 }
 

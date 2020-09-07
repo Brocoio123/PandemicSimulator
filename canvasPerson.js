@@ -1,16 +1,17 @@
 class canvasPerson{
-    constructor(y, x, id){
+    constructor(y, x, id, spriteId){
         //x and y are not pixels on the screen but the position where their respective
         //persons are on the grid.
         this.y = y;
         this.x = x;
+        this.id = id;
+        this.spriteId = spriteId;
+
         this.previousTop = 0
         this.previousLeft = 0
         this.previousBottom = 0
         this.previousRight = 0
-
-        this.id = id;
-        this.sprite = 'http://127.0.0.1/PandemicSimulator/chara0.png';
+        this.sprite = 'http://127.0.0.1/PandemicSimulator/sprites/chara0Down0.png';
         this.animationFrame = 0
         this.XOffset = 0;
         this.YOffset = 0;
@@ -20,18 +21,59 @@ class canvasPerson{
     }
 
     changeSprite = function(spr){
+        let direction = "Down";
+        // console.log(this.XOffset + ", " + this.YOffset)
+        if(this.XOffset == 0){
+            if(this.YOffset == -1){
+                //left
+                direction = "Left"
+            }else 
+            if(this.YOffset == 1){
+                //right
+                direction = "Right"
+            }
+        }else
+        if(this.XOffset == -1){
+            if(this.YOffset == -1){
+                //left-up
+                direction = "Left"
+            }else
+            if(this.YOffset == 0){
+                //up
+                direction = "Up"
+            }else
+            if(this.YOffset == 1){
+                //right-up
+                direction = "Right"
+            }
+        }else
+        if(this.XOffset == 1){
+            if(this.YOffset == -1){
+                //left-down
+                direction = "Left"
+            }else
+            if(this.YOffset == 0){
+                //down
+                direction = "Down"
+            }else
+            if(this.YOffset == 1){
+                //right-down
+                direction = "Right"
+            }
+        }
+
         switch(spr) {
             case 0:
-                this.sprite = 'http://127.0.0.1/PandemicSimulator/chara0.png';
+                this.sprite = 'http://127.0.0.1/PandemicSimulator/sprites/chara' + this.spriteId + direction + '0.png';
                 break;
             case 1:
-                this.sprite = 'http://127.0.0.1/PandemicSimulator/chara1.png';
+                this.sprite = 'http://127.0.0.1/PandemicSimulator/sprites/chara' + this.spriteId + direction + '1.png';
                 break;
             case 2:
-                this.sprite = 'http://127.0.0.1/PandemicSimulator/chara0.png';
+                this.sprite = 'http://127.0.0.1/PandemicSimulator/sprites/chara' + this.spriteId + direction + '0.png';
                 break;
             case 3:
-                this.sprite = 'http://127.0.0.1/PandemicSimulator/chara2.png';
+                this.sprite = 'http://127.0.0.1/PandemicSimulator/sprites/chara' + this.spriteId + direction + '2.png';
                 this.animationFrame = -1;
                 break;
           }
@@ -54,20 +96,20 @@ class canvasPerson{
         function frame(){
             // console.log("LKJ: " + (turnInterval/65))
             if(this.previousLeft + this.XOffsetActive == ((this.y*CellYSize)-(this.y*CellYSize/4)) && this.previousTop + this.YOffsetActive == ((this.x*CellXSize)+(this.x*CellXSize/3))){
-                console.log("CLEARED!!!!!")
-                console.log("CLEARED!!!!!")
-                console.log("CLEARED!!!!!")
-                console.log("CLEARED!!!!!")
-                console.log("CLEARED!!!!!")
-                console.log("CLEARED!!!!!")
-                console.log("CLEARED!!!!!")
-                console.log("CLEARED!!!!!")
-                console.log("CLEARED!!!!!")
-                console.log("CLEARED!!!!!")
-                console.log("CLEARED!!!!!")
-                console.log("CLEARED!!!!!")
-                console.log("CLEARED!!!!!")
-                console.log("--------------")
+                // console.log("CLEARED!!!!!")
+                // console.log("CLEARED!!!!!")
+                // console.log("CLEARED!!!!!")
+                // console.log("CLEARED!!!!!")
+                // console.log("CLEARED!!!!!")
+                // console.log("CLEARED!!!!!")
+                // console.log("CLEARED!!!!!")
+                // console.log("CLEARED!!!!!")
+                // console.log("CLEARED!!!!!")
+                // console.log("CLEARED!!!!!")
+                // console.log("CLEARED!!!!!")
+                // console.log("CLEARED!!!!!")
+                // console.log("CLEARED!!!!!")
+                // console.log("--------------")
                 clearInterval(this.myInterval)
             }else{
                 //console.log(this.XOffset)
