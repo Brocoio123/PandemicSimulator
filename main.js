@@ -18,7 +18,7 @@ var shopCharacter = "P";
 var blockerCharacter = "T";
 var personCharacter = "R";
 var numberOfInfected = 0;
-var personsOnScreen = 1; //have it be modifiable by an event such as a lockdown event. //user input
+var personsOnScreen = 10; //have it be modifiable by an event such as a lockdown event. //user input
 var population = 800000;//800 000  5% of those are on the streets
 var numberOfHealthy = population;
 var nonActiveScreens = 100;
@@ -67,9 +67,9 @@ for (var i = 0; i < screenY; i++) {
 }
 
 //initialize shop
-arrayUpdate(world, 2, 0, shopCharacter);
+arrayUpdate(world, 2, 3, shopCharacter);
 arrayUpdate(world, 3, 7, shopCharacter);
-arrayUpdate(world, 14, 13, shopCharacter);
+arrayUpdate(world, 12, 12, shopCharacter);
 //initialize blockers
 arrayUpdate(world, 1, 1, blockerCharacter);
 arrayUpdate(world, 4, 1, blockerCharacter);
@@ -178,7 +178,7 @@ function turnUpdate(){
     if(cycle == cyclesToReset){
         infectedInCycle = infectedInCycle + calculateOffScreenInfectionsInCycle();
         numberOfInfected = numberOfInfected + infectedInCycle;
-        numberOfHealthy = numberOfHealthy - cycleInfections;
+        numberOfHealthy = numberOfHealthy - infectedInCycle;
         //reset persons on screen
         infectedInCycle = 0;
     }

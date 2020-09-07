@@ -37,7 +37,7 @@ class Person{
             numberOfHealthy--;
             numberOfInfected++;
             infectedInCycle++;
-            // console.log("numberOfInfected: " + numberOfInfected)
+            console.log("numberOfInfected: " + numberOfInfected)
         }
     }
 
@@ -206,19 +206,19 @@ class Person{
         }
 
         var ClosestShopCoordinates
-        if(destination == "closest"){
-            ClosestShopCoordinates = shopNodes[0];
+        ClosestShopCoordinates = shopNodes[0];
             // console.log(shopNodes)
             shopNodes.forEach(shopCoordinates => {
                 if(Math.abs(shopCoordinates[1] - this.y) + Math.abs(shopCoordinates[0] - this.x) < Math.abs(ClosestShopCoordinates[1] - this.y) + Math.abs(ClosestShopCoordinates[0] - this.x)){
                     ClosestShopCoordinates = shopCoordinates;
                 }
             });
-        }else if(destination == "random"){
-            let randDestIndex = Math.round(Math.random() * (shopNodes.length - 1))
-            // console.log(randDestIndex)
+        if(destination == "random"){
+            var randDestIndex = Math.round(Math.random() * (shopNodes.length - 1))
+            while(shopNodes[randDestIndex] == ClosestShopCoordinates){
+                randDestIndex = Math.round(Math.random() * (shopNodes.length - 1))
+            }
             ClosestShopCoordinates = shopNodes[randDestIndex];
-            // console.log(ClosestShopCoordinates)
         }
 
         //adding the nodes
@@ -357,6 +357,7 @@ class Person{
         // console.log(closedNodesTemp)
         
         //Spawned in a invalid dead-end node sqm
+
         try {
             aStarGridTemp[currentNodeInversePath.NodeCoordinates[0]][currentNodeInversePath.NodeCoordinates[1]] = undefined;
         }
@@ -366,6 +367,7 @@ class Person{
             //this.deletePerson();
             return;
         }
+        //console.log(JSON.parse(JSON.stringify(aStarGrid)))
 
         inversePath = new Array();
         while(true){
@@ -387,7 +389,7 @@ class Person{
                             scanOut.push(aStarGridTemp[currentNodeInversePath.NodeCoordinates[0]-1][currentNodeInversePath.NodeCoordinates[1]-1]);
                             directions.push("LEFT-UP")
                         }
-                        if(aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] - 1][currentNodeInversePath.NodeCoordinates[1] - 1] == currentNodeInversePath.StartingNodeCoordinates){stopLoop = true}
+                        if(currentNodeInversePath.NodeCoordinates[0] != 0 && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] - 1][currentNodeInversePath.NodeCoordinates[1] - 1] != undefined && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] - 1][currentNodeInversePath.NodeCoordinates[1] - 1] == currentNodeInversePath.StartingNodeCoordinates){stopLoop = true}
                         break;
                     //up
                     case 2:
@@ -395,7 +397,7 @@ class Person{
                             scanOut.push(aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] - 1][currentNodeInversePath.NodeCoordinates[1]]);
                             directions.push("UP")
                         }
-                        if(aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] - 1][currentNodeInversePath.NodeCoordinates[1]] == currentNodeInversePath.StartingNodeCoordinates){stopLoop = true}
+                        if(currentNodeInversePath.NodeCoordinates[0] != 0 && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] - 1][currentNodeInversePath.NodeCoordinates[1]] != undefined && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] - 1][currentNodeInversePath.NodeCoordinates[1]] == currentNodeInversePath.StartingNodeCoordinates){stopLoop = true}
                         break;
                     //left-up
                     case 3:
@@ -403,7 +405,7 @@ class Person{
                             scanOut.push(aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] - 1][currentNodeInversePath.NodeCoordinates[1] + 1]);
                             directions.push("RIGHT-UP")
                         }
-                        if(aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] - 1][currentNodeInversePath.NodeCoordinates[1] + 1] == currentNodeInversePath.StartingNodeCoordinates){stopLoop = true}
+                        if(currentNodeInversePath.NodeCoordinates[0] != 0 && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] - 1][currentNodeInversePath.NodeCoordinates[1] + 1] != undefined && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] - 1][currentNodeInversePath.NodeCoordinates[1] + 1] == currentNodeInversePath.StartingNodeCoordinates){stopLoop = true}
                         break;
                     //right
                     case 4:
@@ -411,7 +413,7 @@ class Person{
                             scanOut.push(aStarGridTemp[currentNodeInversePath.NodeCoordinates[0]][currentNodeInversePath.NodeCoordinates[1] + 1]);  
                             directions.push("RIGHT")                      
                         }
-                        if(aStarGridTemp[currentNodeInversePath.NodeCoordinates[0]][currentNodeInversePath.NodeCoordinates[1] + 1] == currentNodeInversePath.StartingNodeCoordinates){stopLoop = true}
+                        if(currentNodeInversePath.NodeCoordinates[0] != 0 && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0]][currentNodeInversePath.NodeCoordinates[1] + 1] != undefined && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0]][currentNodeInversePath.NodeCoordinates[1] + 1] == currentNodeInversePath.StartingNodeCoordinates){stopLoop = true}
                         break;
                     //right-down
                     case 5:
@@ -419,7 +421,7 @@ class Person{
                             scanOut.push(aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] + 1][currentNodeInversePath.NodeCoordinates[1] + 1]);  
                             directions.push("RIGHT-DOWN")                      
                         }
-                        if(aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] + 1][currentNodeInversePath.NodeCoordinates[1] + 1] == currentNodeInversePath.StartingNodeCoordinates){stopLoop = true}
+                        if(currentNodeInversePath.NodeCoordinates[0] != 0 && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] + 1][currentNodeInversePath.NodeCoordinates[1] + 1] != undefined && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] + 1][currentNodeInversePath.NodeCoordinates[1] + 1] == currentNodeInversePath.StartingNodeCoordinates){stopLoop = true}
                         break;
                     //down
                     case 6:
@@ -427,7 +429,7 @@ class Person{
                             scanOut.push(aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] + 1][currentNodeInversePath.NodeCoordinates[1]]);    
                             directions.push("DOWN")                    
                         }
-                        if(aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] + 1][currentNodeInversePath.NodeCoordinates[1]] == currentNodeInversePath.StartingNodeCoordinates){stopLoop = true}
+                        if(currentNodeInversePath.NodeCoordinates[0] != 0 && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] + 1][currentNodeInversePath.NodeCoordinates[1]] != undefined && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] + 1][currentNodeInversePath.NodeCoordinates[1]] == currentNodeInversePath.StartingNodeCoordinates){stopLoop = true}
                         break;
                     //left-down
                     case 7:
@@ -435,7 +437,7 @@ class Person{
                             scanOut.push(aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] + 1][currentNodeInversePath.NodeCoordinates[1] - 1]);    
                             directions.push("LEFT-DOWN")                    
                         }
-                        if(aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] + 1][currentNodeInversePath.NodeCoordinates[1] - 1] == currentNodeInversePath.StartingNodeCoordinates){stopLoop = true}
+                        if(currentNodeInversePath.NodeCoordinates[0] != 0 && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] + 1][currentNodeInversePath.NodeCoordinates[1] - 1] != undefined && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] + 1][currentNodeInversePath.NodeCoordinates[1] - 1] == currentNodeInversePath.StartingNodeCoordinates){stopLoop = true}
                         break;
                   }
             }
