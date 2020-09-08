@@ -67,21 +67,43 @@ for (var i = 0; i < screenY; i++) {
     } 
 }
 
+var destinationSpots = [[3, 7], [12, 2], [5, 0], [2, 3], [12, 12], [7, 13], [7, 7]]
+var blockerSpots =  [[4, 0], [5, 0], [4, 1], [5, 1], [4, 2], [5, 2], [3, 12], [4, 12],
+                    [4, 13], [4, 14], [4, 15], [2, 12], [6, 0], [6, 7], [5, 7], [8,6], 
+                    [8, 5]/*, [16, 7], [17, 7], [16, 8], 
+[17, 8], [16, 9], [17, 9], [16, 10], [17, 10]*/]
 //initialize shop
+console.log(destinationSpots)
+
+refreshDestinations()
+refreshBlockers()
 // arrayUpdate(world, 2, 3, shopCharacter);
-arrayUpdate(world, 3, 7, shopCharacter);
-// arrayUpdate(world, 12, 12, shopCharacter);
-arrayUpdate(world, 12, 2, shopCharacter);
-arrayUpdate(world, 5, 0, shopCharacter);
+// arrayUpdate(world, destinationSpots[0][0],destinationSpots[0][1], shopCharacter);
+// // arrayUpdate(world, 12, 12, shopCharacter);
+// arrayUpdate(world, 12, 2, shopCharacter);
+// arrayUpdate(world, 5, 0, shopCharacter);
 //initialize blockers
-arrayUpdate(world, 1, 1, blockerCharacter);
-arrayUpdate(world, 4, 1, blockerCharacter);
-arrayUpdate(world, 5, 1, blockerCharacter);
-arrayUpdate(world, 6, 1, blockerCharacter);
-arrayUpdate(world, 7, 1, blockerCharacter);
-arrayUpdate(world, 6, 3, blockerCharacter);
-arrayUpdate(world, 7, 3, blockerCharacter);
-arrayUpdate(world, 8, 3, blockerCharacter);
+// arrayUpdate(world, 1, 1, blockerCharacter);
+// arrayUpdate(world, 4, 1, blockerCharacter);
+// arrayUpdate(world, 5, 1, blockerCharacter);
+// arrayUpdate(world, 6, 1, blockerCharacter);
+// arrayUpdate(world, 7, 1, blockerCharacter);
+// arrayUpdate(world, 6, 3, blockerCharacter);
+// arrayUpdate(world, 7, 3, blockerCharacter);
+// arrayUpdate(world, 8, 3, blockerCharacter);
+
+function refreshDestinations(){
+    destinationSpots.forEach(destinationSpot => {
+        arrayUpdate(world, destinationSpot[0], destinationSpot[1], shopCharacter);
+    });
+}
+
+function refreshBlockers(){
+    blockerSpots.forEach(blockerSpot => {
+        console.log("LLLL")
+        arrayUpdate(world, blockerSpot[0], blockerSpot[1], blockerCharacter);
+    });
+}
 
 //Spawn persons
 for (var i = 0; i < personsOnScreen; i++) { 
@@ -96,7 +118,7 @@ for (var i = 0; i < personsOnScreen; i++) {
 } 
 
 function personsUpdateMovement(){
-    console.log("ERROR main!!!!!!!!!!")
+    //console.log("ERROR main!!!!!!!!!!")
 
     let oldY = 0;
     let oldX = 0;
@@ -183,12 +205,15 @@ function InfectAdjacentPersons(){
 function turnUpdate(){
     turnPassed = true;
     cycle++;
-    if(cycle == cyclesToReset){
+    if(cycle % cyclesToReset == 0){
         infectedInCycle = infectedInCycle + calculateOffScreenInfectionsInCycle();
         numberOfInfected = numberOfInfected + infectedInCycle;
         numberOfHealthy = numberOfHealthy - infectedInCycle;
         //reset persons on screen
         infectedInCycle = 0;
+        refreshDestinations()
+        refreshBlockers()
+        console.log("REFRESHED!!!!!")
     }
     updatePreviousPositionValues();
     resetThePersonsPositions();
