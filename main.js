@@ -18,7 +18,7 @@ var shopCharacter = "P";
 var blockerCharacter = "T";
 var personCharacter = "R";
 var numberOfInfected = 0;
-var personsOnScreen = 10; //have it be modifiable by an event such as a lockdown event. //user input
+var personsOnScreen = 13; //have it be modifiable by an event such as a lockdown event. //user input
 var population = 800000;//800 000  5% of those are on the streets
 var numberOfHealthy = population;
 var nonActiveScreens = 100;
@@ -68,9 +68,11 @@ for (var i = 0; i < screenY; i++) {
 }
 
 //initialize shop
-arrayUpdate(world, 2, 3, shopCharacter);
+// arrayUpdate(world, 2, 3, shopCharacter);
 arrayUpdate(world, 3, 7, shopCharacter);
-arrayUpdate(world, 12, 12, shopCharacter);
+// arrayUpdate(world, 12, 12, shopCharacter);
+arrayUpdate(world, 12, 2, shopCharacter);
+arrayUpdate(world, 5, 0, shopCharacter);
 //initialize blockers
 arrayUpdate(world, 1, 1, blockerCharacter);
 arrayUpdate(world, 4, 1, blockerCharacter);
@@ -94,15 +96,19 @@ for (var i = 0; i < personsOnScreen; i++) {
 } 
 
 function personsUpdateMovement(){
-    var oldY = 0;
-    var oldX = 0;
+    console.log("ERROR main!!!!!!!!!!")
+
+    let oldY = 0;
+    let oldX = 0;
     //change to foreach
     for (var i = 0; i < personsVar.length; i++) {
         oldY = personsVar[i].y;
         oldX = personsVar[i].x;
         personsVar[i].nextMove();
         if(personsVar[i].y != oldY || personsVar[i].x != oldX){
-            arrayUpdate(world, oldX , oldY, groundCharacter);
+            if(world[oldX][oldY] != blockerCharacter){
+                arrayUpdate(world, oldX , oldY, groundCharacter);
+            }
         }
     } 
 }
