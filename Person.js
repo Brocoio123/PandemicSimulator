@@ -8,17 +8,15 @@ class Person{
         this.CI = this.calculateCautionIndex();
         this.IC = this.calculateInfectionChance();
         this.status = "healthy";
-        this.action = "";
         this.name = "placeholdername";
         this.gender = "placeholdergender";
-        // console.log("Person created");
-        arrayUpdate(world, this.x, this.y, personCharacter);
-        this.currentMovementVector = []
+        this.currentMovementVector = [];
         this.moveQueue = [];
+        arrayUpdate(world, this.x, this.y, personCharacter);
     }
 
     deletePerson = function(){
-        arrayUpdate(world, this.x, this.y, groundCharacter)
+        arrayUpdate(world, this.x, this.y, groundCharacter);
         delete this;
     }
 
@@ -32,27 +30,26 @@ class Person{
             numberOfHealthy--;
             numberOfInfected++;
             infectedInCycle++;
-            //console.log("numberOfInfected: " + numberOfInfected)
         }
     }
 
     calculatePanicIndex = function(){
-        return 6 + GVTL
+        return 6 + GVTL;
     }
 
     calculateCautionIndex = function(){
-        return this.PI / (GVTL * 3)
+        return this.PI / (GVTL * 3);
     }
 
     //calculate the infection chance of this person
     //maxInfectionPercentage = (WI+CI+PI)*GVTL
     calculateInfectionChance = function(){
-        return (this.CI + this.PI) * GVTL
+        return (this.CI + this.PI) * GVTL;
     }
 
     nextMove = function(){
-        var i = this.moveQueue.pop();
-        this.movePerson(i);
+        let nextMovevar = this.moveQueue.pop();
+        this.movePerson(nextMovevar);
     }
 
     movePerson = function(direction){
@@ -61,12 +58,12 @@ class Person{
                 if(this.y != 0){
                     if(world[this.x][this.y - 1] == personCharacter || world[this.x][this.y - 1] == shopCharacter || world[this.x][this.y - 1] == blockerCharacter){
                         this.moveQueue=[];
-                        // console.log("RECALCULATING.......")
                         this.aStarPathFinding("random");
                         return;
                     }
+
                     this.y--;
-                    this.currentMovementVector = [0, -1]
+                    this.currentMovementVector = [0, -1];
                 }
                 else{
                     this.moveQueue.push("left");
@@ -76,14 +73,13 @@ class Person{
                 if(this.y != 0 && this.x != 0){
                     if(world[this.x - 1][this.y - 1] == personCharacter || world[this.x - 1][this.y - 1] == shopCharacter || world[this.x - 1][this.y - 1] == blockerCharacter){
                         this.moveQueue=[];
-                        // console.log("RECALCULATING.......")
                         this.aStarPathFinding("random");
                         return;
                     }
+
                     this.y--;
                     this.x--;
-                    this.currentMovementVector = [-1, -1]
-
+                    this.currentMovementVector = [-1, -1];
                 }
                 else{
                     this.moveQueue.push("left-up");
@@ -93,12 +89,12 @@ class Person{
                 if(this.x != 0){
                     if(world[this.x - 1][this.y] == personCharacter || world[this.x - 1][this.y] == shopCharacter || world[this.x - 1][this.y] == blockerCharacter){
                         this.moveQueue=[];
-                        // console.log("RECALCULATING.......")
                         this.aStarPathFinding("random");
                         return;
                     }
+
                     this.x--;
-                    this.currentMovementVector = [-1, 0]
+                    this.currentMovementVector = [-1, 0];
                 }
                 else{
                     this.moveQueue.push("up");
@@ -108,13 +104,13 @@ class Person{
                 if(this.y < (screenY - 1) && this.x != 0){
                     if(world[this.x - 1][this.y + 1] == personCharacter || world[this.x - 1][this.y + 1] == shopCharacter || world[this.x - 1][this.y + 1] == blockerCharacter){
                         this.moveQueue=[];
-                        // console.log("RECALCULATING.......")
                         this.aStarPathFinding("random");
                         return;
                     }
+
                     this.y++;
                     this.x--;
-                    this.currentMovementVector = [-1, 1]
+                    this.currentMovementVector = [-1, 1];
                 }
                 else{
                     this.moveQueue.push("right-up");
@@ -124,12 +120,12 @@ class Person{
                 if(this.y < (screenY - 1)){
                     if(world[this.x][this.y + 1] == personCharacter || world[this.x][this.y + 1] == shopCharacter || world[this.x][this.y + 1] == blockerCharacter){
                         this.moveQueue=[];
-                        // console.log("RECALCULATING.......")
                         this.aStarPathFinding("random");
                         return;
                     }
+
                     this.y++;
-                    this.currentMovementVector = [0, 1]
+                    this.currentMovementVector = [0, 1];
                 }
                 else{
                     this.moveQueue.push("right");
@@ -139,13 +135,13 @@ class Person{
                 if(this.y < (screenY - 1) && this.x < (screenX - 1)){
                     if(world[this.x + 1][this.y + 1] == personCharacter || world[this.x + 1][this.y + 1] == shopCharacter || world[this.x + 1][this.y + 1] == blockerCharacter){
                         this.moveQueue=[];
-                        // console.log("RECALCULATING.......")
                         this.aStarPathFinding("random");
                         return;
                     }
+
                     this.y++;
                     this.x++;
-                    this.currentMovementVector = [1, 1]
+                    this.currentMovementVector = [1, 1];
                 }
                 else{
                     this.moveQueue.push("right-down");
@@ -155,12 +151,12 @@ class Person{
                 if(this.x < (screenX - 1)){
                     if(world[this.x + 1][this.y] == personCharacter || world[this.x + 1][this.y] == shopCharacter || world[this.x + 1][this.y] == blockerCharacter){
                         this.moveQueue=[];
-                        // console.log("RECALCULATING.......")
                         this.aStarPathFinding("random");
                         return;
                     }
+
                     this.x++;
-                    this.currentMovementVector = [1, 0]
+                    this.currentMovementVector = [1, 0];
                 }
                 else{
                     this.moveQueue.push("down");
@@ -170,20 +166,20 @@ class Person{
                 if(this.y != 0 && this.x < (screenX - 1)){
                     if(world[this.x][this.y - 1] == personCharacter || world[this.x][this.y - 1] == shopCharacter || world[this.x][this.y - 1] == blockerCharacter){
                         this.moveQueue=[];
-                        // console.log("RECALCULATING.......")
                         this.aStarPathFinding("random");
                         return;
                     }
+
                     this.y--;
                     this.x++;
-                    this.currentMovementVector = [1, -1]
+                    this.currentMovementVector = [1, -1];
                 }
                 else{
                     this.moveQueue.push("left-down");
                 }
                 break;
           }
-        //   console.log(this.currentMovementVector)
+
           personsPositions.push([this.y, this.x]);
           arrayUpdate(world, this.x, this.y, personCharacter);
     }
@@ -191,22 +187,24 @@ class Person{
     //Algorithm to find the shortest path to its destination
     //destination should be either "random" or "closest"
     aStarPathFinding = function(destination = "closest"){
-        var aStarGrid = new Array(screenY + 1);
-        var openedNodes = new Array();
-        var closedNodes = new Array();
-        var currentNodeCoordinates = [this.x, this.y];
-        var pathEnd = false;
-        var nextNodeToClose = openedNodes[0];
-        for (var i = 0; i < aStarGrid.length; i++) {
+        let aStarGrid = new Array(screenY + 1);
+        let openedNodes = new Array();
+        let closedNodes = new Array();
+        let currentNodeCoordinates = [this.x, this.y];
+        let pathEnd = false;
+        let nextNodeToClose = openedNodes[0];
+        let shopNodes = new Array();
+        let e = 0;
+        let ClosestShopCoordinates;
+
+        
+        for (let i = 0; i < aStarGrid.length; i++) {
             aStarGrid[i] = [30];
         }
-        
-        var shopNodes = new Array();
-        var e = 0;
 
         //Shop is selected as the end node based on closeness to the Person or randomness
-        for (var i = 0; i < screenY; i++) {
-            for (var j = 0; j < screenX; j++) {
+        for (let i = 0; i < screenY; i++) {
+            for (let j = 0; j < screenX; j++) {
                 if(world[j][i] == shopCharacter){
                     shopNodes[e] = [j,i];
                     e++;
@@ -214,7 +212,6 @@ class Person{
             }
         }
 
-        var ClosestShopCoordinates
         ClosestShopCoordinates = shopNodes[0];
             // console.log(shopNodes)
             shopNodes.forEach(shopCoordinates => {
@@ -223,16 +220,16 @@ class Person{
                 }
             });
         if(destination == "random"){
-            var randDestIndex = Math.round(Math.random() * (shopNodes.length - 1))
+            let randDestIndex = Math.round(Math.random() * (shopNodes.length - 1));
             while(shopNodes[randDestIndex] == ClosestShopCoordinates){
-                randDestIndex = Math.round(Math.random() * (shopNodes.length - 1))
+                randDestIndex = Math.round(Math.random() * (shopNodes.length - 1));
             }
             ClosestShopCoordinates = shopNodes[randDestIndex];
         }
 
         //adding the nodes
-        for (var i = 0; i < screenY; i++) { 
-            for (var j = 0; j < screenX; j++) { 
+        for (let i = 0; i < screenY; i++) { 
+            for (let j = 0; j < screenX; j++) { 
                 aStarGrid[j][i] = new Node([j, i], [this.x, this.y], ClosestShopCoordinates);
                 //adding the blockers
                 if(world[j][i] == blockerCharacter){
@@ -250,10 +247,9 @@ class Person{
         }
 
         // console.log(JSON.parse(JSON.stringify(aStarGrid)))
-        // (aStarGrid);
         //a star main loop
         while(true){
-            for (var i = 0; i < 8; i++) {
+            for (let i = 0; i < 8; i++) {
                 switch(i) {
                     //left
                     case 0:
@@ -350,12 +346,10 @@ class Person{
             try{
                 nextNodeToClose.status = "closed";
                 closedNodes.push(nextNodeToClose);
-                //linha desnecessaria?
-                //openedNodes[iOpenNodeToDelete] = undefined;
                 currentNodeCoordinates = nextNodeToClose.NodeCoordinates;
             }
             catch(TypeError){
-                // console.log("ERROR 1!!!!!!!!!!!!!!!!!!!!!!!!")
+                // console.log("ERROR 1!!!!!!!!!!!!!!!!!!!!!!!!");
                 this.moveQueue=[];
                 this.aStarPathFinding("random");
                 return;
@@ -363,108 +357,94 @@ class Person{
         }
 
         //Create a direct path out of the closed nodes
-        var stopLoop = false
-        var directions;
-        var inversePath;
-        var scanOut;
-        var closedNodesTemp = closedNodes.slice(0);
-        var currentNodeInversePath = closedNodesTemp[closedNodesTemp.length - 1];
-        var previousNode;
-        var iPreviousNode;
-        var aStarGridTemp = aStarGrid.slice(0);
-        // console.log(currentNodeInversePath)
-        // console.log(closedNodesTemp)
+        let directions;
+        let inversePath;
+        let scanOut;
+        let closedNodesTemp = closedNodes.slice(0);
+        let currentNodeInversePath = closedNodesTemp[closedNodesTemp.length - 1];
+        let previousNode;
+        let iPreviousNode;
+        let aStarGridTemp = aStarGrid.slice(0);
         
         //Spawned in a invalid dead-end node sqm
         try {
             aStarGridTemp[currentNodeInversePath.NodeCoordinates[0]][currentNodeInversePath.NodeCoordinates[1]] = undefined;
         }
         catch(TypeError) {
-            // console.log("catched!")
-            // console.log("person deleted!")
-            //this.deletePerson();
-            this.moveQueue=[]
+            this.moveQueue=[];
             this.aStarPathFinding("random");
             return;
         }
-        //console.log(JSON.parse(JSON.stringify(aStarGrid)))
 
+        //console.log(JSON.parse(JSON.stringify(aStarGrid)))
         inversePath = new Array();
         while(true){
             scanOut = new Array(); 
             directions = new Array();
-             for (var i = 0; i < 8; i++) {
+             for (let i = 0; i < 8; i++) {
                 switch(i) {
                     //left
                     case 0:
                         if(aStarGridTemp[currentNodeInversePath.NodeCoordinates[0]][currentNodeInversePath.NodeCoordinates[1] - 1] != undefined && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0]][currentNodeInversePath.NodeCoordinates[1] - 1] instanceof Node && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0]][currentNodeInversePath.NodeCoordinates[1] - 1].status == "closed"){
                             scanOut.push(aStarGridTemp[currentNodeInversePath.NodeCoordinates[0]][currentNodeInversePath.NodeCoordinates[1] - 1]);
-                            directions.push("LEFT")
+                            directions.push("LEFT");
                         }
-                        if(aStarGridTemp[currentNodeInversePath.NodeCoordinates[0]][currentNodeInversePath.NodeCoordinates[1] - 1] == currentNodeInversePath.StartingNodeCoordinates){stopLoop = true}
                         break;
                     //left-up
                     case 1:
                         if(currentNodeInversePath.NodeCoordinates[0] != 0 && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] - 1][currentNodeInversePath.NodeCoordinates[1] - 1] != undefined && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] - 1][currentNodeInversePath.NodeCoordinates[1] - 1] instanceof Node && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] - 1][currentNodeInversePath.NodeCoordinates[1] - 1].status == "closed"){
                             scanOut.push(aStarGridTemp[currentNodeInversePath.NodeCoordinates[0]-1][currentNodeInversePath.NodeCoordinates[1]-1]);
-                            directions.push("LEFT-UP")
+                            directions.push("LEFT-UP");
                         }
-                        if(currentNodeInversePath.NodeCoordinates[0] != 0 && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] - 1][currentNodeInversePath.NodeCoordinates[1] - 1] != undefined && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] - 1][currentNodeInversePath.NodeCoordinates[1] - 1] == currentNodeInversePath.StartingNodeCoordinates){stopLoop = true}
                         break;
                     //up
                     case 2:
                         if(currentNodeInversePath.NodeCoordinates[0] != 0 && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] - 1][currentNodeInversePath.NodeCoordinates[1]] != undefined && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] - 1][currentNodeInversePath.NodeCoordinates[1]] instanceof Node && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] - 1][currentNodeInversePath.NodeCoordinates[1]].status == "closed"){
                             scanOut.push(aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] - 1][currentNodeInversePath.NodeCoordinates[1]]);
-                            directions.push("UP")
+                            directions.push("UP");
                         }
-                        if(currentNodeInversePath.NodeCoordinates[0] != 0 && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] - 1][currentNodeInversePath.NodeCoordinates[1]] != undefined && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] - 1][currentNodeInversePath.NodeCoordinates[1]] == currentNodeInversePath.StartingNodeCoordinates){stopLoop = true}
                         break;
                     //left-up
                     case 3:
                         if(currentNodeInversePath.NodeCoordinates[0] != 0 && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] - 1][currentNodeInversePath.NodeCoordinates[1] + 1] != undefined && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] - 1][currentNodeInversePath.NodeCoordinates[1] + 1] instanceof Node && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] - 1][currentNodeInversePath.NodeCoordinates[1] + 1].status == "closed"){
                             scanOut.push(aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] - 1][currentNodeInversePath.NodeCoordinates[1] + 1]);
-                            directions.push("RIGHT-UP")
+                            directions.push("RIGHT-UP");
                         }
-                        if(currentNodeInversePath.NodeCoordinates[0] != 0 && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] - 1][currentNodeInversePath.NodeCoordinates[1] + 1] != undefined && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] - 1][currentNodeInversePath.NodeCoordinates[1] + 1] == currentNodeInversePath.StartingNodeCoordinates){stopLoop = true}
                         break;
                     //right
                     case 4:
                         if(aStarGridTemp[currentNodeInversePath.NodeCoordinates[0]][currentNodeInversePath.NodeCoordinates[1] + 1] != undefined && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0]][currentNodeInversePath.NodeCoordinates[1] + 1] instanceof Node && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0]][currentNodeInversePath.NodeCoordinates[1] + 1].status == "closed"){
                             scanOut.push(aStarGridTemp[currentNodeInversePath.NodeCoordinates[0]][currentNodeInversePath.NodeCoordinates[1] + 1]);  
-                            directions.push("RIGHT")                      
+                            directions.push("RIGHT");                   
                         }
-                        if(currentNodeInversePath.NodeCoordinates[0] != 0 && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0]][currentNodeInversePath.NodeCoordinates[1] + 1] != undefined && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0]][currentNodeInversePath.NodeCoordinates[1] + 1] == currentNodeInversePath.StartingNodeCoordinates){stopLoop = true}
                         break;
                     //right-down
                     case 5:
                         if(aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] + 1][currentNodeInversePath.NodeCoordinates[1] + 1] != undefined && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] + 1][currentNodeInversePath.NodeCoordinates[1] + 1] instanceof Node && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] + 1][currentNodeInversePath.NodeCoordinates[1] + 1].status == "closed"){
                             scanOut.push(aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] + 1][currentNodeInversePath.NodeCoordinates[1] + 1]);  
-                            directions.push("RIGHT-DOWN")                      
+                            directions.push("RIGHT-DOWN");                      
                         }
-                        if(currentNodeInversePath.NodeCoordinates[0] != 0 && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] + 1][currentNodeInversePath.NodeCoordinates[1] + 1] != undefined && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] + 1][currentNodeInversePath.NodeCoordinates[1] + 1] == currentNodeInversePath.StartingNodeCoordinates){stopLoop = true}
                         break;
                     //down
                     case 6:
                         if(aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] + 1][currentNodeInversePath.NodeCoordinates[1]] != undefined && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] + 1][currentNodeInversePath.NodeCoordinates[1]] instanceof Node && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] + 1][currentNodeInversePath.NodeCoordinates[1]].status == "closed"){
                             scanOut.push(aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] + 1][currentNodeInversePath.NodeCoordinates[1]]);    
-                            directions.push("DOWN")                    
+                            directions.push("DOWN");                    
                         }
-                        if(currentNodeInversePath.NodeCoordinates[0] != 0 && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] + 1][currentNodeInversePath.NodeCoordinates[1]] != undefined && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] + 1][currentNodeInversePath.NodeCoordinates[1]] == currentNodeInversePath.StartingNodeCoordinates){stopLoop = true}
                         break;
                     //left-down
                     case 7:
                         if(aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] + 1][currentNodeInversePath.NodeCoordinates[1] - 1] != undefined && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] + 1][currentNodeInversePath.NodeCoordinates[1] - 1] instanceof Node && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] + 1][currentNodeInversePath.NodeCoordinates[1] - 1].status == "closed"){
                             scanOut.push(aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] + 1][currentNodeInversePath.NodeCoordinates[1] - 1]);    
-                            directions.push("LEFT-DOWN")                    
+                            directions.push("LEFT-DOWN");                    
                         }
-                        if(currentNodeInversePath.NodeCoordinates[0] != 0 && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] + 1][currentNodeInversePath.NodeCoordinates[1] - 1] != undefined && aStarGridTemp[currentNodeInversePath.NodeCoordinates[0] + 1][currentNodeInversePath.NodeCoordinates[1] - 1] == currentNodeInversePath.StartingNodeCoordinates){stopLoop = true}
                         break;
                   }
             }
 
             if(scanOut.length > 1){
-                iPreviousNode = -1;
                 let iPreviousNodeToChoose;
+                iPreviousNode = -1;
                 previousNode = scanOut[0];
                 currentNodeInversePath = scanOut[0];
                 scanOut.forEach(node => {
@@ -473,7 +453,7 @@ class Person{
                         iPreviousNode++;
                         iPreviousNodeToChoose = iPreviousNode;
                     }else{
-                        iPreviousNode++
+                        iPreviousNode++;
                     }
                 });
                 inversePath.push(directions[iPreviousNodeToChoose]);
@@ -482,22 +462,24 @@ class Person{
                 currentNodeInversePath = scanOut[0];
                 inversePath.push(directions[0]);
             }
+
             try{
                 aStarGridTemp[currentNodeInversePath.NodeCoordinates[0]][currentNodeInversePath.NodeCoordinates[1]] = undefined;
             }
             catch(TypeError){
-                // console.log("ERROR 2!!!!!!!!!!!!!!!!!!!!!!!!")
+                // console.log("ERROR 2!!!!!!!!!!!!!!!!!!!!!!!!");
                 this.moveQueue=[];
-                this.aStarPathFinding("random")
+                this.aStarPathFinding("random");
                 return;
             }
+
             if(currentNodeInversePath.NodeCoordinates[0] == currentNodeInversePath.StartingNodeCoordinates[0] && currentNodeInversePath.NodeCoordinates[1] == currentNodeInversePath.StartingNodeCoordinates[1]){
                 break;
             }
         }
 
-        var path = inversePath.reverse();
-        var finalPath = new Array();
+        let path = inversePath.reverse();
+        let finalPath = new Array();
         path.forEach(pathDirection => {
             switch(pathDirection) {
                 case "LEFT":
@@ -526,9 +508,7 @@ class Person{
                 break;
               }
         });
-        this.moveQueue = finalPath.reverse()
-        //console.log(finalPath)
-        //console.log("PATH CALCULATED!!!!")
+        this.moveQueue = finalPath.reverse();
         return;
     }
 }

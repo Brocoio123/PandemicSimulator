@@ -7,17 +7,17 @@ class canvasPerson{
         this.id = id;
         this.spriteId = spriteId;
 
-        this.previousTop = 0
-        this.previousLeft = 0
-        this.previousBottom = 0
-        this.previousRight = 0
+        this.previousTop;
+        this.previousLeft;
+        this.previousBottom;
+        this.previousRight;
         this.sprite = 'http://127.0.0.1/PandemicSimulator/sprites/chara0Down0.png';
-        this.animationFrame = 0
-        this.XOffset = 0;
-        this.YOffset = 0;
-        this.XOffsetActive = 0;
-        this.YOffsetActive = 0;
-        this.myInterval = 0
+        this.XOffset;
+        this.YOffset;
+        this.XOffsetActive;
+        this.YOffsetActive;
+        this.myInterval;
+        this.animationFrame = 0;
     }
 
     changeSprite = function(spr){
@@ -26,39 +26,39 @@ class canvasPerson{
         if(this.XOffset == 0){
             if(this.YOffset == -1){
                 //left
-                direction = "Left"
+                direction = "Left";
             }else 
             if(this.YOffset == 1){
                 //right
-                direction = "Right"
+                direction = "Right";
             }
         }else
         if(this.XOffset == -1){
             if(this.YOffset == -1){
                 //left-up
-                direction = "Left"
+                direction = "Left";
             }else
             if(this.YOffset == 0){
                 //up
-                direction = "Up"
+                direction = "Up";
             }else
             if(this.YOffset == 1){
                 //right-up
-                direction = "Right"
+                direction = "Right";
             }
         }else
         if(this.XOffset == 1){
             if(this.YOffset == -1){
                 //left-down
-                direction = "Left"
+                direction = "Left";
             }else
             if(this.YOffset == 0){
                 //down
-                direction = "Down"
-            }else
-            if(this.YOffset == 1){
-                //right-down
-                direction = "Right"
+                direction = "Down";
+        }else
+        if(this.YOffset == 1){
+            //right-down
+            direction = "Right";
             }
         }
 
@@ -83,64 +83,37 @@ class canvasPerson{
     updatePreviousVars = function(){
         this.previousTop = (this.x*CellXSize)+(this.x*CellXSize/3);
         this.previousLeft = (this.y*CellYSize)-(this.y*CellYSize/4);
-        this.previousBottom = (((this.x*CellXSize)+(this.x*CellXSize/3))+CellYSize)
-        this.previousRight = ((this.y*CellYSize)-(this.y*CellYSize/4)+CellXSize)
+        this.previousBottom = (((this.x*CellXSize)+(this.x*CellXSize/3))+CellYSize);
+        this.previousRight = ((this.y*CellYSize)-(this.y*CellYSize/4)+CellXSize);
     }
 
     moveCanvasPerson = function(){
         //only works with values greater than turnInter
-        this.XOffsetActive = 0
-        this.YOffsetActive = 0
-        clearInterval(this.myInterval)
-        this.myInterval = setInterval(frame.bind(this),(turnInterval/65)/*5*/)//50
+        this.XOffsetActive = 0;
+        this.YOffsetActive = 0;
+        clearInterval(this.myInterval);
+        this.myInterval = setInterval(frame.bind(this),(turnInterval/65)/*5*/);//50
         function frame(){
-            // console.log("LKJ: " + (turnInterval/65))
             if(this.previousLeft + this.XOffsetActive == ((this.y*CellYSize)-(this.y*CellYSize/4)) && this.previousTop + this.YOffsetActive == ((this.x*CellXSize)+(this.x*CellXSize/3))){
-                // console.log("CLEARED!!!!!")
-                // console.log("CLEARED!!!!!")
-                // console.log("CLEARED!!!!!")
-                // console.log("CLEARED!!!!!")
-                // console.log("CLEARED!!!!!")
-                // console.log("CLEARED!!!!!")
-                // console.log("CLEARED!!!!!")
-                // console.log("CLEARED!!!!!")
-                // console.log("CLEARED!!!!!")
-                // console.log("CLEARED!!!!!")
-                // console.log("CLEARED!!!!!")
-                // console.log("CLEARED!!!!!")
-                // console.log("CLEARED!!!!!")
-                // console.log("--------------")
-                clearInterval(this.myInterval)
+                // console.log("CLEARED!!!!!");
+                // console.log("--------------");
+                clearInterval(this.myInterval);
             }else{
-                //console.log(this.XOffset)
-                //console.log(this.XOffsetActive)
-
                 //because CellXSize and CellYSize are different then both will not equal their targets at the same
                 //time if both are incremented or decremented by 1(moving diagonally).
                 this.XOffsetActive += (this.YOffset * 0.75);
                 this.YOffsetActive += this.XOffset;
-                
-                // console.log(this.previousTop)
-                // console.log(((this.x*CellXSize)+(this.x*CellXSize/3)))
-
-
-                // console.log("currentX: " + (this.previousLeft + this.XOffsetActive))
-                // console.log("destinationX: " + ((this.y*CellYSize)-(this.y*CellYSize/4)))
-                // console.log("currentY: " + (this.previousTop + this.YOffsetActive))
-                // console.log("destinationY: " + ((this.x*CellXSize)+(this.x*CellXSize/3)))
             }
-            console.log("a setInterval()")
+
+            console.log("a setInterval()");
         }
     }
 
     draw = function(){
         let canvasContext = canvas.getContext('2d');
-        // canvasContext.clearRect((this.y*CellYSize)-(this.y*CellYSize/4), (this.x*CellXSize)+(this.x*CellXSize/3), ((this.y*CellYSize)-(this.y*CellYSize/4)+CellXSize), (((this.x*CellXSize)+(this.x*CellXSize/3))+CellYSize));
-        //canvasContext.clearRect(this.previousTop, this.previousLeft, this.previousBottom, this.previousRight);
         let img = new Image;
         img.src = this.sprite;
         canvasContext.imageSmoothingEnabled = false;
         canvasContext.drawImage(img, this.previousLeft + this.XOffsetActive, this.previousTop + this.YOffsetActive, CellXSize,  CellYSize);
-        // canvasContext.drawImage(img, ((this.y*CellYSize)-(this.y*CellYSize/4)), ((this.x*CellXSize)+(this.x*CellXSize/3)) , CellXSize,  CellYSize);
     }
 }
