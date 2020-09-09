@@ -61,7 +61,7 @@ class Person{
                 if(this.y != 0){
                     if(world[this.x][this.y - 1] == personCharacter || world[this.x][this.y - 1] == shopCharacter || world[this.x][this.y - 1] == blockerCharacter){
                         this.moveQueue=[];
-                        console.log("RECALCULATING.......")
+                        // console.log("RECALCULATING.......")
                         this.aStarPathFinding("random");
                         return;
                     }
@@ -76,7 +76,7 @@ class Person{
                 if(this.y != 0 && this.x != 0){
                     if(world[this.x - 1][this.y - 1] == personCharacter || world[this.x - 1][this.y - 1] == shopCharacter || world[this.x - 1][this.y - 1] == blockerCharacter){
                         this.moveQueue=[];
-                        console.log("RECALCULATING.......")
+                        // console.log("RECALCULATING.......")
                         this.aStarPathFinding("random");
                         return;
                     }
@@ -93,7 +93,7 @@ class Person{
                 if(this.x != 0){
                     if(world[this.x - 1][this.y] == personCharacter || world[this.x - 1][this.y] == shopCharacter || world[this.x - 1][this.y] == blockerCharacter){
                         this.moveQueue=[];
-                        console.log("RECALCULATING.......")
+                        // console.log("RECALCULATING.......")
                         this.aStarPathFinding("random");
                         return;
                     }
@@ -108,7 +108,7 @@ class Person{
                 if(this.y < (screenY - 1) && this.x != 0){
                     if(world[this.x - 1][this.y + 1] == personCharacter || world[this.x - 1][this.y + 1] == shopCharacter || world[this.x - 1][this.y + 1] == blockerCharacter){
                         this.moveQueue=[];
-                        console.log("RECALCULATING.......")
+                        // console.log("RECALCULATING.......")
                         this.aStarPathFinding("random");
                         return;
                     }
@@ -124,7 +124,7 @@ class Person{
                 if(this.y < (screenY - 1)){
                     if(world[this.x][this.y + 1] == personCharacter || world[this.x][this.y + 1] == shopCharacter || world[this.x][this.y + 1] == blockerCharacter){
                         this.moveQueue=[];
-                        console.log("RECALCULATING.......")
+                        // console.log("RECALCULATING.......")
                         this.aStarPathFinding("random");
                         return;
                     }
@@ -139,7 +139,7 @@ class Person{
                 if(this.y < (screenY - 1) && this.x < (screenX - 1)){
                     if(world[this.x + 1][this.y + 1] == personCharacter || world[this.x + 1][this.y + 1] == shopCharacter || world[this.x + 1][this.y + 1] == blockerCharacter){
                         this.moveQueue=[];
-                        console.log("RECALCULATING.......")
+                        // console.log("RECALCULATING.......")
                         this.aStarPathFinding("random");
                         return;
                     }
@@ -155,7 +155,7 @@ class Person{
                 if(this.x < (screenX - 1)){
                     if(world[this.x + 1][this.y] == personCharacter || world[this.x + 1][this.y] == shopCharacter || world[this.x + 1][this.y] == blockerCharacter){
                         this.moveQueue=[];
-                        console.log("RECALCULATING.......")
+                        // console.log("RECALCULATING.......")
                         this.aStarPathFinding("random");
                         return;
                     }
@@ -170,7 +170,7 @@ class Person{
                 if(this.y != 0 && this.x < (screenX - 1)){
                     if(world[this.x][this.y - 1] == personCharacter || world[this.x][this.y - 1] == shopCharacter || world[this.x][this.y - 1] == blockerCharacter){
                         this.moveQueue=[];
-                        console.log("RECALCULATING.......")
+                        // console.log("RECALCULATING.......")
                         this.aStarPathFinding("random");
                         return;
                     }
@@ -245,7 +245,10 @@ class Person{
         aStarGrid[ClosestShopCoordinates[0]][ClosestShopCoordinates[1]] = shopCharacter;
 
         //closing the first node
-        aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]].status = "closed";
+        if(aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]] instanceof Node){
+            aStarGrid[currentNodeCoordinates[0]][currentNodeCoordinates[1]].status = "closed";
+        }
+
         // console.log(JSON.parse(JSON.stringify(aStarGrid)))
         // (aStarGrid);
         //a star main loop
@@ -352,7 +355,7 @@ class Person{
                 currentNodeCoordinates = nextNodeToClose.NodeCoordinates;
             }
             catch(TypeError){
-                console.log("ERROR 1!!!!!!!!!!!!!!!!!!!!!!!!")
+                // console.log("ERROR 1!!!!!!!!!!!!!!!!!!!!!!!!")
                 this.moveQueue=[];
                 this.aStarPathFinding("random");
                 return;
@@ -483,7 +486,7 @@ class Person{
                 aStarGridTemp[currentNodeInversePath.NodeCoordinates[0]][currentNodeInversePath.NodeCoordinates[1]] = undefined;
             }
             catch(TypeError){
-                console.log("ERROR 2!!!!!!!!!!!!!!!!!!!!!!!!")
+                // console.log("ERROR 2!!!!!!!!!!!!!!!!!!!!!!!!")
                 this.moveQueue=[];
                 this.aStarPathFinding("random")
                 return;

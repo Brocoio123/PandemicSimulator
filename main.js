@@ -11,7 +11,7 @@ screenX = 15;
 
 // Create one dimensional array 
 var world = new Array(screenX + 1);
-var turnInterval = 1000; //turn interval in milliseconds //3260
+var turnInterval = 800; //turn interval in milliseconds //3260
 var personsVar = [];
 var groundCharacter = "A";
 var shopCharacter = "P";
@@ -70,7 +70,7 @@ for (var i = 0; i < screenY; i++) {
 var destinationSpots = [[3, 7], [12, 2], [5, 0], [2, 3], [12, 12], [7, 13], [7, 7]]
 var blockerSpots =  [[4, 0], [5, 0], [4, 1], [5, 1], [4, 2], [5, 2], [3, 12], [4, 12],
                     [4, 13], [4, 14], [4, 15], [2, 12], [6, 0], [6, 7], [5, 7], [8,6], 
-                    [8, 5]/*, [16, 7], [17, 7], [16, 8], 
+                    [8, 5], [9, 3], [9, 4], [9, 5]/*, [16, 7], [17, 7], [16, 8], 
 [17, 8], [16, 9], [17, 9], [16, 10], [17, 10]*/]
 //initialize shop
 console.log(destinationSpots)
@@ -100,7 +100,6 @@ function refreshDestinations(){
 
 function refreshBlockers(){
     blockerSpots.forEach(blockerSpot => {
-        console.log("LLLL")
         arrayUpdate(world, blockerSpot[0], blockerSpot[1], blockerCharacter);
     });
 }

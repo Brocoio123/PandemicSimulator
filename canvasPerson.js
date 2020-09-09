@@ -92,7 +92,7 @@ class canvasPerson{
         this.XOffsetActive = 0
         this.YOffsetActive = 0
         clearInterval(this.myInterval)
-        this.myInterval = setInterval(frame.bind(this),(turnInterval/65))//50
+        this.myInterval = setInterval(frame.bind(this),(turnInterval/65)/*5*/)//50
         function frame(){
             // console.log("LKJ: " + (turnInterval/65))
             if(this.previousLeft + this.XOffsetActive == ((this.y*CellYSize)-(this.y*CellYSize/4)) && this.previousTop + this.YOffsetActive == ((this.x*CellXSize)+(this.x*CellXSize/3))){
@@ -129,6 +129,7 @@ class canvasPerson{
                 // console.log("currentY: " + (this.previousTop + this.YOffsetActive))
                 // console.log("destinationY: " + ((this.x*CellXSize)+(this.x*CellXSize/3)))
             }
+            console.log("a setInterval()")
         }
     }
 
