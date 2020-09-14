@@ -105,7 +105,7 @@ class canvasPerson{
                 this.YOffsetActive += this.XOffset;
             }
 
-            console.log("a setInterval()");
+            //console.log("a setInterval()");
         }
     }
 
