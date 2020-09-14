@@ -4,15 +4,86 @@ class Person{
         this.x = x;
         this.id = id;
         this.spriteId = spriteId;
-        this.PI = this.calculatePanicIndex();
-        this.CI = this.calculateCautionIndex();
-        this.IC = this.calculateInfectionChance();
+        this.PI;
+        this.CI;
+        this.preventionMeasures = []; //this indicates whether this person wears a mask, gloves, practices social distancing, etc...
+        this.preventionMutator = 0; //this changes the variable IC below according to life choices made by this person
+        this.IC;
         this.status = "healthy";
-        this.name = "placeholdername";
-        this.gender = "placeholdergender";
+        this.name = firstNames[Math.floor(Math.random() * firstNames.length)] + " " 
+                    + lastNames[Math.floor(Math.random() * lastNames.length)];
         this.currentMovementVector = [];
         this.moveQueue = [];
         arrayUpdate(world, this.x, this.y, personCharacter);
+        this.calculatePanicIndex();
+        this.calculateCautionIndex();
+        this.calculatePreventionMeasures();
+        this.calculatePreventionMutator();
+        this.calculateInfectionChance();
+        this.setSpriteId()
+    }
+
+    setSpriteId = function(){
+        this.spriteId = Math.floor(Math.random() * (nbOfSprites));
+    }
+
+    calculatePreventionMeasures = function(){
+        this.preventionMeasures = [];
+        this.preventionMeasures.length = 0;
+        console.log(this.preventionMeasures)
+        let preventionRand = 0;
+        let hundredPercentRand;
+        if(this.CI >= 10){
+            for (var i = 0, len = preventionAvaiable.length; i < len; i++) {
+                switch(preventionAvaiable[i]) {
+                    case "Hand washing":
+                        preventionRand = Math.random() * (this.CI + 70);
+                        break;
+                    case "Social distancing":
+                        preventionRand = Math.random() * (this.CI + 30);
+                        break;
+                    case "Mask":
+                        preventionRand = Math.random() * (this.CI + 10);
+                        break;
+                    case "Gloves":
+                        preventionRand = Math.random() * (this.CI + 5);
+                        break;
+                    case "Hazmat":
+                        preventionRand = Math.random() * (this.CI - 60);
+                        break;
+                }
+                hundredPercentRand = Math.random() * 100;
+                if(hundredPercentRand <= preventionRand){
+                    this.preventionMeasures.push(preventionAvaiable[i]);
+                }
+            }
+        }
+    }
+
+    calculatePreventionMutator = function(){
+        this.preventionMutator = 0;
+        for (var i = 0, len = this.preventionMeasures.length; i < len; i++) {
+            switch(this.preventionMeasures[i]) {
+                case "Hand washing":
+                    this.preventionMutator += 0.14;
+                    break;
+                case "Social distancing":
+                    this.preventionMutator += 0.15;
+                    break;
+                case "Mask":
+                    this.preventionMutator += 0.14;
+                    break;
+                case "Gloves":
+                    this.preventionMutator += 0.02;
+                    break;
+                case "Hazmat":
+                    this.preventionMutator += 0.9;
+                    break;
+            }
+        }
+        if(this.preventionMutator >= 1){
+            this.preventionMutator = 0.99;
+        }
     }
 
     deletePerson = function(){
@@ -29,22 +100,26 @@ class Person{
             this.status = "infected";
             numberOfHealthy--;
             numberOfInfected++;
-            infectedInCycle++;
+            infectedInOneDay++;
         }
     }
 
+    //calculate the panic of people, since people react differently to crisies, the value is randomized
+    //according the overral state of the crisis
     calculatePanicIndex = function(){
-        return 6 + GVTL;
+        // this.PI =  Math.random() * (GVTL*100);
+        this.PI = Math.random() * ((GVTL*100) - ((GVTL*100)/1.5)) + ((GVTL*100)/1.5)
     }
 
     calculateCautionIndex = function(){
-        return this.PI / (GVTL * 3);
+        //this.CI =  (this.PI/2) / GVTL;
+        this.CI = Math.random() * ((this.PI*1.5) - (this.PI/1.5)) + (this.PI/1.5)
     }
 
     //calculate the infection chance of this person
     //maxInfectionPercentage = (WI+CI+PI)*GVTL
     calculateInfectionChance = function(){
-        return (this.CI + this.PI) * GVTL;
+        this.IC =  ((this.CI + this.PI) * GVTL) - (((this.CI + this.PI) * GVTL) * this.preventionMutator);
     }
 
     nextMove = function(){
