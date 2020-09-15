@@ -90,13 +90,18 @@ displayWorldInformation()
 function displayWorldInformation() {
     hud2Context.clearRect(0, 0, hud2.width, hud2.height);
     hud2Context.fillText("Global virus threat level: " + GVTL, (hud2.width*0.05), (hud2.height*0.1));
-    hud2Context.fillText("numberOfInfected: " + numberOfInfected, (hud2.width*0.05), (hud2.height*0.2));
-    hud2Context.fillText("numberOfHealthy " + numberOfHealthy, (hud2.width*0.05), (hud2.height*0.3));
+    hud2Context.fillText("Population: " + population, (hud2.width*0.05), (hud2.height*0.15));
+    hud2Context.fillText("Number of stage 1 infected: " + numberOfStage1Infected, (hud2.width*0.05), (hud2.height*0.2));
+    hud2Context.fillText("Number of stage 2 infected: " + numberOfStage2Infected, (hud2.width*0.05), (hud2.height*0.25));
+    hud2Context.fillText("Number of stage 3 infected: " + numberOfStage3Infected, (hud2.width*0.05), (hud2.height*0.3));
+    hud2Context.fillText("Number of healthy " + numberOfHealthy, (hud2.width*0.05), (hud2.height*0.35));
+    hud2Context.fillText("Number of recovered " + numberOfRecovered, (hud2.width*0.05), (hud2.height*0.4));
+    hud2Context.fillText("Number of dead " + numberOfDead, (hud2.width*0.05), (hud2.height*0.45));
     //botar infected on the day before
-    hud2Context.fillText("time: " + hours%24 + ":00", (hud2.width*0.05), (hud2.height*0.4));
+    hud2Context.fillText("Time: " + hours%24 + ":00", (hud2.width*0.05), (hud2.height*0.5));
     //only shows infected in the current screen
-    hud2Context.fillText("infections on screen: " + infectedInOneDay, (hud2.width*0.05), (hud2.height*0.5));
-    hud2Context.fillText("infected the previous day: " + infectedThePreviousDay, (hud2.width*0.05), (hud2.height*0.6));
+    hud2Context.fillText("Infections on screen: " + infectedInOneDay, (hud2.width*0.05), (hud2.height*0.55));
+    hud2Context.fillText("Total infected the yesterday: " + infectedThePreviousDay, (hud2.width*0.05), (hud2.height*0.6));
     return;
 }
 

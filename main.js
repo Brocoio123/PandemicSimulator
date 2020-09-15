@@ -40,8 +40,12 @@ var blockerCharacter = "T";
 var personCharacter = "R";
 var personsOnScreen = 13; //have it be modifiable by an event such as a lockdown event. //user input
 var population = 800000; //800 000  5% of those are on the streets
-var numberOfInfected = 0;
+var numberOfStage1Infected = 0;
+var numberOfStage2Infected = 0;
+var numberOfStage3Infected = 0;
 var numberOfHealthy = population;
+var numberOfDead = 0;
+var numberOfRecovered = 0;
 var po = calculateNumberOfPeopleOutdoors(); //po : population outdoors. Percentage of the population that are outdoors
 var ns = calculateNumberOfScreens();
 var osi = 0; //offscreen infections
@@ -51,6 +55,8 @@ var infectedThePreviousDay = 0;
 var hoursReset = 24;
 var outdoorInfectionRate = 0;
 var indoorInfectionRate = 0;
+var mortalityRate;
+var recoveryRate;
 var nbOfSprites = 6;
 var personsPositions = new Array();
 //var lockdownLevel = 0; //0%
@@ -60,7 +66,6 @@ var destinationSpots = [[3, 7], [12, 2], [5, 0], [2, 3], [12, 12], [7, 13], [7, 
 var blockerSpots =  [[4, 0], [5, 0], [4, 1], [5, 1], [4, 2], [5, 2], [3, 12], [4, 12],
                     [4, 13], [4, 14], [4, 15], [2, 12], [6, 0], [6, 7], [5, 7], [8,6], 
                     [8, 5], [9, 3], [9, 4], [9, 5]];
-
 
 // Loop to create 2D array using 1D array 
 for (var i = 0; i < world.length; i++) { 
@@ -94,12 +99,9 @@ arrayDisplay();
 //update world in n milisecond turns
 setInterval(turnUpdate, turnInterval);
 
-function calculateNumberOfPeopleOutdoors(){
-    return population * 0.05; //0.05% is the percentage of the population that are outdoors at any given time on average
-}
-
-function calculateNumberOfScreens(){
-    return po / personsOnScreen;
+function calculateMortalityAndRecoveryRates(){
+    mortalityRate = ((GVTL/GVTL*10)/20)*mortalityEventWeight;
+    recoveryRate = ((GVTL/GVTL*10)/20)*recoveryEventWeight;
 }
 
 function calculateOutdoorInfectionRate(){
@@ -116,6 +118,54 @@ function calculateIndoorInfectionRate(){//staying indoors reduce infection chanc
     }
 }
 
+function killOrRecoverOrAdvanceInfecion(){
+    for (var i = 0; i < numberOfStage1Infected; i++) {
+        if(Math.random() * 100 < recoveryRate){
+            numberOfRecovered += 1;
+            numberOfStage1Infected -= 1;
+        }else if(Math.random() * 100 < mortalityRate*0.5){
+            numberOfDead += 1;
+            population -= 1;
+            numberOfStage1Infected -= 1;
+        }else if(Math.random() * 100 < indoorInfectionRate + (numberOfStage1Infected/1000)){
+            numberOfStage1Infected -= 1;
+            numberOfStage2Infected += 1;
+        }
+    }
+
+    for (var i = 0; i < numberOfStage2Infected; i++) {
+        if(Math.random() * 100 < recoveryRate){
+            numberOfRecovered += 1;
+            numberOfStage2Infected -= 1;
+        }else if(Math.random() * 100 < mortalityRate){
+            numberOfDead += 1;
+            population -= 1;
+            numberOfStage2Infected -= 1;
+        }else if(Math.random() * 100 < indoorInfectionRate+ (numberOfStage2Infected/1000)){
+            numberOfStage2Infected -= 1;
+            numberOfStage3Infected += 1;
+        }
+    }
+
+    for (var i = 0; i < numberOfStage3Infected; i++) {
+        if(Math.random() * 100 < recoveryRate){
+            numberOfRecovered += 1;
+            numberOfStage3Infected -= 1;
+        }else if(Math.random() * 100 < mortalityRate * 1.5){
+            numberOfDead += 1;
+            population -= 1;
+            numberOfStage3Infected -= 1;
+        }
+    }
+    // numberOfDead += Math.round(numberOfInfected * mortalityRate);
+    // numberOfInfected, population -= Math.round(numberOfInfected * mortalityRate);
+}
+
+function calculateNumberOfInfected(){
+    numberOfStage1Infected += infectedInOneDay;
+    numberOfHealthy -= infectedInOneDay;
+}
+
 function calculateIndoorInfections(){
     return Math.round(((population - po) * indoorInfectionRate)/1.7); //indoor infections
 }
@@ -123,6 +173,17 @@ function calculateIndoorInfections(){
 function calculateOutdoorInfections(){
     return Math.round((po * outdoorInfectionRate)/10);
 }
+
+function calculateNumberOfPeopleOutdoors(){
+    return population * 0.05; //0.05% is the percentage of the population that are outdoors at any given time on average
+}
+
+function calculateNumberOfScreens(){
+    return po / personsOnScreen;
+}
+
+
+
 
 function refreshDestinations(){
     destinationSpots.forEach(destinationSpot => {
@@ -228,15 +289,17 @@ function ReplacePersons(){
 function turnUpdate(){
     hours++;
     if(hours % hoursReset == 0){
+        calculateMortalityAndRecoveryRates();
         calculateOutdoorInfectionRate();
         calculateIndoorInfectionRate();
         console.log(outdoorInfectionRate)
         console.log(indoorInfectionRate)
         console.log(calculateOutdoorInfections())
         console.log(calculateIndoorInfections())
-        infectedInOneDay = Math.round(infectedInOneDay + calculateIndoorInfections() + calculateOutdoorInfections());
-        numberOfInfected = numberOfInfected + infectedInOneDay;
-        numberOfHealthy = numberOfHealthy - infectedInOneDay;
+        infectedInOneDay = infectedInOneDay + calculateIndoorInfections() + calculateOutdoorInfections();
+        //recovered
+        calculateNumberOfInfected();
+        killOrRecoverOrAdvanceInfecion();
         infectedThePreviousDay = infectedInOneDay;
         infectedInOneDay = 0;
         refreshDestinations();

@@ -99,7 +99,7 @@ class Person{
         if(infectRand <= this.IC){
             this.status = "infected";
             numberOfHealthy--;
-            numberOfInfected++;
+            numberOfStage1Infected++;
             infectedInOneDay++;
         }
     }
