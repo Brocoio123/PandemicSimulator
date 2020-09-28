@@ -300,6 +300,7 @@ function InfectAdjacentPersons(){
 
 function ReplacePersons(){
     personsVar.forEach(person => {
+        person.status = "healthy"
         person.calculatePanicIndex();
         person.calculateCautionIndex();
         person.calculatePreventionMeasures();
@@ -307,7 +308,6 @@ function ReplacePersons(){
         person.calculateInfectionChance();
         person.setSpriteId();
         canvasPersons[person.id].spriteId = person.spriteId;
-
         person.name = firstNames[Math.floor(Math.random() * firstNames.length)] + " " 
                     + lastNames[Math.floor(Math.random() * lastNames.length)];
     });
