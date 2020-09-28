@@ -57,11 +57,12 @@ var outdoorInfectionRate = 0;
 var indoorInfectionRate = 0;
 var mortalityRate;
 var recoveryRate;
+var GVTL = 0.1; //global virus threat level(between 0 and 1)
+var GVTLAdjustmentNumber = 0;//value(positive or negative) that is added to GVTL every 24 hours.
 var nbOfSprites = 6;
 var personsPositions = new Array();
 //var lockdownLevel = 0; //0%
 var jsonPersons;
-var GVTL = 0.1; //global virus threat level(between 0 and 1)
 var infectionEventWeight = 1;
 var recoveryEventWeight = 1;
 var mortalityEventWeight = 1;
@@ -71,6 +72,12 @@ var destinationSpots = [[3, 7], [12, 2], [5, 0], [2, 3], [12, 12], [7, 13], [7, 
 var blockerSpots =  [[4, 0], [5, 0], [4, 1], [5, 1], [4, 2], [5, 2], [3, 12], [4, 12],
                     [4, 13], [4, 14], [4, 15], [2, 12], [6, 0], [6, 7], [5, 7], [8,6], 
                     [8, 5], [9, 3], [9, 4], [9, 5]];
+
+function CalculateGVTL(){
+    GVTL += GVTLAdjustmentNumber;
+    GVTLAdjustmentNumber = 0;
+
+}
 
 $.getJSON("events.json", function(json) {
     events = json;
@@ -301,6 +308,7 @@ function InfectAdjacentPersons(){
 function ReplacePersons(){
     personsVar.forEach(person => {
         person.status = "healthy"
+        person.CalculateGVTL();
         person.calculatePanicIndex();
         person.calculateCautionIndex();
         person.calculatePreventionMeasures();

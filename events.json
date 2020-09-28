@@ -30,7 +30,7 @@
         {
             "Event name": "A infected person has joined a social gathering",
             "Base_probability":6,
-            "Effect":"numberOfStage1Infected 1,numberOfHealthy -1"    
+            "Effect":"GVTLAdjustmentNumber 0.01"    
         }
     ]
 }
