@@ -1,0 +1,36 @@
+{
+    "0.0":[
+        {
+            "Event name": "A person has eaten infected food",
+            "Base probability":3,
+            "Effect":"numberOfStage1Infected+1,numberOfHealthy -1"    
+        },  
+        {
+            "Event name": "A person touched a infected surface",
+            "Base probability":3,
+            "Effect":"numberOfStage1Infected 1,numberOfHealthy -1"   
+        },
+        {
+            "Event name": "A infected person has joined a social gathering",
+            "Base probability":6,
+            "Effect":"numberOfStage1Infected 1,numberOfHealthy -1"    
+        }
+    ],
+    "0.1":[
+        {
+            "Event name": "A person has eaten infected food",
+            "Base_probability":3,
+            "Effect":"numberOfStage1Infected 1,numberOfHealthy -1"   
+        },  
+        {
+            "Event_name": "A person touched a infected surface",
+            "Base_probability":3,
+            "Effect":"numberOfStage1Infected 1,numberOfHealthy -1"    
+        },
+        {
+            "Event name": "A infected person has joined a social gathering",
+            "Base_probability":6,
+            "Effect":"numberOfStage1Infected 1,numberOfHealthy -1"    
+        }
+    ]
+}

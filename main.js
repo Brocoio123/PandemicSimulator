@@ -62,13 +62,42 @@ var personsPositions = new Array();
 //var lockdownLevel = 0; //0%
 var jsonPersons;
 var GVTL = 0.1; //global virus threat level(between 0 and 1)
+var infectionEventWeight = 1;
+var recoveryEventWeight = 1;
+var mortalityEventWeight = 1;
+var events;
+var activeEvents = [];
 var destinationSpots = [[3, 7], [12, 2], [5, 0], [2, 3], [12, 12], [7, 13], [7, 7]];
 var blockerSpots =  [[4, 0], [5, 0], [4, 1], [5, 1], [4, 2], [5, 2], [3, 12], [4, 12],
                     [4, 13], [4, 14], [4, 15], [2, 12], [6, 0], [6, 7], [5, 7], [8,6], 
                     [8, 5], [9, 3], [9, 4], [9, 5]];
 
+$.getJSON("events.json", function(json) {
+    events = json;
+    console.log(events)
+});
+
+function eventProcessing(){
+    let hundredPercentRand;
+    let tempJsonEffects;
+    let tempEffects;
+    events[GVTL.toFixed(1)].forEach(event => {
+        hundredPercentRand = Math.random() * 100;
+        if(!activeEvents.includes(event.Event_name)){
+            if(hundredPercentRand <= event.Base_probability){
+                activeEvents.push(event.Event_name);
+                tempJsonEffects = event.Effect.split(',');
+                tempJsonEffects.forEach(tempJsonEffect => {
+                    tempEffects = tempJsonEffect.split(" ");
+                    window[tempEffects[0]] += parseInt(tempEffects[1]);
+                });
+            }
+        }
+    });
+}
+
 // Loop to create 2D array using 1D array 
-for (var i = 0; i < world.length; i++) { 
+for (var i = 0; i < world.length; i++) {
     world[i] = [31]; 
 }
 
@@ -105,12 +134,12 @@ function calculateMortalityAndRecoveryRates(){
 }
 
 function calculateOutdoorInfectionRate(){
-    outdoorInfectionRate = (Math.random() * ((infectedInOneDay / personsOnScreen) - ((infectedInOneDay / personsOnScreen)/1.5) ) + ((infectedInOneDay / personsOnScreen)/1.5)/2)
+    outdoorInfectionRate = (Math.random() * ((infectedInOneDay / personsOnScreen) - ((infectedInOneDay / personsOnScreen)/1.5) ) + ((infectedInOneDay / personsOnScreen)/1.5)/2.5)
 
 }
 
 function calculateIndoorInfectionRate(){//staying indoors reduce infection chance by up to 80%!
-    indoorInfectionRate = Math.random() * (outdoorInfectionRate * (GVTL/3) - ((outdoorInfectionRate * (GVTL/3))/1.5) ) + ((outdoorInfectionRate * (GVTL/3))/1.5);
+    indoorInfectionRate = Math.random() * (outdoorInfectionRate * (GVTL/3) - ((outdoorInfectionRate * (GVTL/3))/1.5) ) + ((outdoorInfectionRate * (GVTL/3))/2);
 
     if(indoorInfectionRate == 0){
          indoorInfectionRate = Math.random() * (((GVTL*GVTL)*(GVTL/3)) - ((GVTL*GVTL)*(GVTL/3)/1.5)) + ((GVTL*GVTL)*(GVTL/3)/1.5)
@@ -157,8 +186,6 @@ function killOrRecoverOrAdvanceInfecion(){
             numberOfStage3Infected -= 1;
         }
     }
-    // numberOfDead += Math.round(numberOfInfected * mortalityRate);
-    // numberOfInfected, population -= Math.round(numberOfInfected * mortalityRate);
 }
 
 function calculateNumberOfInfected(){
@@ -288,6 +315,7 @@ function ReplacePersons(){
 
 function turnUpdate(){
     hours++;
+    eventProcessing();
     if(hours % hoursReset == 0){
         calculateMortalityAndRecoveryRates();
         calculateOutdoorInfectionRate();
@@ -307,7 +335,6 @@ function turnUpdate(){
         ReplacePersons();
         console.log("REFRESHED!!!!!");
     }
-    
     updatePreviousPositionValues();
     resetThePersonsPositions();
     personsUpdateMovement();
