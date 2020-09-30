@@ -14,12 +14,17 @@
             }
         </style>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" type="text/javascript"></script>
+        <script src="//code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+        <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css">
     </head>
     <body>
         <canvas id="mainCanvas" style="float:left;image-rendering: pixelated;background: url('http://127.0.0.1/PandemicSimulator/background.png') no-repeat; background-size: cover;">></canvas>
         <canvas id="hud2" style="background-color: white;border-radius:25px;float:right;">></canvas>
         <canvas id="hud1" style="background-color: white;border-radius:25px;float:right;">></canvas>
         <div id="world"></div>
+        <div id="sliderSpeed"></div>
+
+        <!-- <div id="sliderGvtl"></div> -->
 
         <script src="Node.js"></script>
         <script src="Person.js"></script>

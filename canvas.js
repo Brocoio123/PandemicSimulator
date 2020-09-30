@@ -36,6 +36,9 @@ drawCanvasPerson();
 canvas.addEventListener('click', displayPersonInformation, false);
 setInterval(animateSpriteCanvasPersons, (300));
 setInterval(drawCanvasPersons, ((turnInterval/65)-((turnInterval/65)*0.25)));
+//associate this setinterval to a variable on a function, use jquery onchange to destroy and recreate
+//this setinterval dynamically when slider is touched
+
 
 function cacheHudImages(){
     for (var i = 0, len = cachedImages.length; i < len; i++) {

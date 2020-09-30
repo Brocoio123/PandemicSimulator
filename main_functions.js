@@ -38,7 +38,7 @@ var groundCharacter = "A";
 var shopCharacter = "P";
 var blockerCharacter = "T";
 var personCharacter = "R";
-var personsOnScreen = 13; //have it be modifiable by an event such as a lockdown event. //user input
+var personsOnScreen = 3; //have it be modifiable by an event such as a lockdown event. //user input
 var personsOnScreenAdjustmentNumber = 0;
 var population = 800000; //800 000  5% of those are on the streets
 var numberOfStage1Infected = 0;
@@ -73,6 +73,12 @@ var destinationSpots = [[3, 7], [12, 2], [5, 0], [2, 3], [12, 12], [7, 13], [7, 
 var blockerSpots =  [[4, 0], [5, 0], [4, 1], [5, 1], [4, 2], [5, 2], [3, 12], [4, 12],
                     [4, 13], [4, 14], [4, 15], [2, 12], [6, 0], [6, 7], [5, 7], [8,6], 
                     [8, 5], [9, 3], [9, 4], [9, 5]];
+
+function changeSimulationSpeed(){
+    var speed = $('#sliderSpeed').slider("option", "value");
+    console.log(speed)
+    turnInterval = speed;
+}
 
 function calculatePersonsOnScreen(){
     personsOnScreen += personsOnScreenAdjustmentNumber;

@@ -1,3 +1,13 @@
+$("#sliderSpeed").slider({
+    orientation:"horizontal",
+    range:"min",
+    max:1000,
+    value:turnInterval,
+    slide:changeSimulationSpeed,
+    change:changeSimulationSpeed
+})
+$("#sliderSpeed").slider()
+
 //display text map
 arrayDisplay();
 
@@ -5,6 +15,7 @@ arrayDisplay();
 setInterval(turnUpdate, turnInterval);
 
 function turnUpdate(){
+    console.log(turnInterval)
     hours++;
     eventProcessing();
     if(hours % hoursReset == 0){
