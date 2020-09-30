@@ -23,9 +23,9 @@
             "Effect":"numberOfStage1Infected 1,numberOfHealthy -1"   
         },  
         {
-            "Event_name": "A person touched a infected surface",
+            "Event_name": "Lockdown put in place",
             "Base_probability":3,
-            "Effect":"numberOfStage1Infected 1,numberOfHealthy -1"    
+            "Effect":"personsOnScreenAdjustmentNumber -5"    
         },
         {
             "Event name": "A infected person has joined a social gathering",
