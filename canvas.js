@@ -13,6 +13,13 @@ var hud2Context = hud2.getContext('2d');
 //redo this smarter
 var scaleFactor = 2;
 
+var myCanvasDrawInterval;
+
+function drawInCanvas(){
+    clearInterval(myCanvasDrawInterval);
+    myCanvasDrawInterval = setInterval(drawCanvasPersons, ((turnInterval/65)-((turnInterval/65)*0.25)));
+}
+
 //pseudo bounding boxes/colliders
 CellXSize = 24*scaleFactor;
 CellYSize = 32*scaleFactor;
@@ -35,10 +42,10 @@ drawCanvasPerson();
 
 canvas.addEventListener('click', displayPersonInformation, false);
 setInterval(animateSpriteCanvasPersons, (300));
-setInterval(drawCanvasPersons, ((turnInterval/65)-((turnInterval/65)*0.25)));
+drawInCanvas();
+// setInterval(drawCanvasPersons, ((turnInterval/65)-((turnInterval/65)*0.25)));
 //associate this setinterval to a variable on a function, use jquery onchange to destroy and recreate
 //this setinterval dynamically when slider is touched
-
 
 function cacheHudImages(){
     for (var i = 0, len = cachedImages.length; i < len; i++) {
@@ -130,7 +137,7 @@ function displayPersonInformation(e) {
                 hud1Context.drawImage(img, (hud1.width*0.05), (hud1.height*0.2), CellXSize,  CellYSize);
                 hud1Context.font = "10px Arial";
                 for (let i = 0, len = personsVar[canvasPerson.id].preventionMeasures.length; i < len; i++) {
-                    console.log(personsVar[canvasPerson.id].preventionMeasures[i])
+                    console.log(personsVar[canvasPerson.id].preventionMeasures[i]);
                     hud1Context.fillText(personsVar[canvasPerson.id].preventionMeasures[i], (hud1.width*0.01), ((hud1.height*0.7)+(i*10)));
 
                 }

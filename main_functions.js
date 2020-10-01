@@ -74,10 +74,21 @@ var blockerSpots =  [[4, 0], [5, 0], [4, 1], [5, 1], [4, 2], [5, 2], [3, 12], [4
                     [4, 13], [4, 14], [4, 15], [2, 12], [6, 0], [6, 7], [5, 7], [8,6], 
                     [8, 5], [9, 3], [9, 4], [9, 5]];
 
-function changeSimulationSpeed(){
+var changeSpeedTrigger = false;
+
+function simulationSpeedChange(){
     var speed = $('#sliderSpeed').slider("option", "value");
-    console.log(speed)
+    console.log(speed);
     turnInterval = speed;
+    if(turnInterval/1000 == 1){
+        document.getElementById("speedText").innerHTML = "Hour duration: " + (turnInterval/1000) + " second";
+    }else{
+        document.getElementById("speedText").innerHTML = "Hour duration: " + (turnInterval/1000) + " seconds";
+    }
+}
+
+function SliderValueChange(){
+    changeSpeedTrigger = true;
 }
 
 function calculatePersonsOnScreen(){

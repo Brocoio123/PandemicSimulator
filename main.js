@@ -1,10 +1,18 @@
+if(turnInterval/1000 == 1){
+    document.getElementById("speedText").innerHTML = "Hour duration: " + (turnInterval/1000) + " second";
+}else{
+    document.getElementById("speedText").innerHTML = "Hour duration: " + (turnInterval/1000) + " seconds";
+}
+
+var mainInterval;
+
 $("#sliderSpeed").slider({
     orientation:"horizontal",
-    range:"min",
-    max:1000,
+    range:false,
+    max:10000,
     value:turnInterval,
-    slide:changeSimulationSpeed,
-    change:changeSimulationSpeed
+    // slide:updateSpeedOnScreen,
+    change:SliderValueChange
 })
 $("#sliderSpeed").slider()
 
@@ -12,9 +20,23 @@ $("#sliderSpeed").slider()
 arrayDisplay();
 
 //update world in n milisecond turns
-setInterval(turnUpdate, turnInterval);
+mainInterval = setInterval(turnUpdate, turnInterval);
+
+//choose better name, there's already one "update".
+function updateTheScreen(){
+    changeSpeedTrigger = false;
+    simulationSpeedChange()
+    drawInCanvas();
+    clearInterval(mainInterval);
+    mainInterval = setInterval(turnUpdate, turnInterval);
+}
+
 
 function turnUpdate(){
+    if(changeSpeedTrigger){
+        updateTheScreen();
+        return;
+    }
     console.log(turnInterval)
     hours++;
     eventProcessing();
